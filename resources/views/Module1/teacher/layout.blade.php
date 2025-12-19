@@ -38,6 +38,7 @@
 
 
     {{-- Manage Course --}}
+<<<<<<< Updated upstream
     <a href="{{ route('module2.index') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
         {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
@@ -78,6 +79,51 @@
             <span>Logout</span>
         </button>
     </form>
+=======
+
+    {{--    <a href="{{ route('administrator.addteacher') }}"
+           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+           {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+            <span class="text-lg">📚</span>
+            <span>Add Teacher</span>
+        </a>--}}
+
+        {{-- Content --}}
+    {{--   <a href="{{ route('module3.index') }}"
+   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+   {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+    <span class="text-lg">📄</span>
+    <span>Content</span>
+</a>--}}
+
+
+     {{-- Assessment --}}
+{{-- <a href="{{ route('module4.index') }}"
+   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+   {{ request()->routeIs('module4.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+    <span class="text-lg">📝</span>
+    <span>Assessment</span>
+</a>--}}
+
+
+        {{-- Settings --}}
+     {{--   <a href="{{ url('/settings') }}"
+           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+           {{ request()->is('settings') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+            <span class="text-lg">⚙️</span>
+            <span>Settings</span>
+        </a>--}}
+
+        {{-- Logout --}}
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit"
+                class="flex items-center space-x-3 px-4 py-3 mt-8 rounded-lg text-gray-300 hover:bg-red-600 transition w-full text-left">
+                <span class="text-lg">➡️</span>
+                <span>Logout</span>
+            </button>
+        </form>
+>>>>>>> Stashed changes
 
     </nav>
 </aside>

@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+<<<<<<< Updated upstream
 use Illuminate\Http\Request;
+=======
+use Illuminate\Http\Request; 
+>>>>>>> Stashed changes
 use App\Models\User;
 use App\Http\Controllers\ManageAuthenticationController;
 use App\Http\Controllers\ManageCourseController;
@@ -13,7 +17,10 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Module1\DashboardController;
 use App\Http\Controllers\Module1\AdministratorController;
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 /*
 |--------------------------------------------------------------------------
 | Your existing module routes (UNCHANGED)
@@ -55,7 +62,11 @@ Route::post('/administrator/addteacher', [AdministratorController::class, 'store
 
 
 
+<<<<<<< Updated upstream
 //Route::get('/module1', [ManageAuthenticationController::class, 'index'])->name('module1.index');
+=======
+Route::get('/module1', [ManageAuthenticationController::class, 'index'])->name('module1.index');
+>>>>>>> Stashed changes
 
 Route::resource('module2', ManageCourseController::class);
 
@@ -93,9 +104,15 @@ Route::delete('/teacher/content/{id}', [ManageContentController::class, 'destroy
     ->name('content.destroy');
     
 
+<<<<<<< Updated upstream
 Route::get('/dashboard1', function () {
     return redirect()->route('module3.index');  // you can change to module2 or homepage later
 })->name('dashboard1');
+=======
+Route::get('/dashboard', function () {
+    return redirect()->route('module3.index');  // you can change to module2 or homepage later
+})->name('dashboard');
+>>>>>>> Stashed changes
 
 /*
 |--------------------------------------------------------------------------
