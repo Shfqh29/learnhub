@@ -1,4 +1,4 @@
-@extends('layouts.learnhub')
+@extends('Module1.teacher.layout')
 
 @section('content')
     <h1 class="text-3xl font-bold text-black mb-6">Add Content - {{ $course->title }}</h1>

@@ -1,4 +1,4 @@
-@extends('layouts.learnhub')
+@extends('Module1.teacher.layout')
 
 @section('content')
 <div class="max-w-6xl mx-auto py-10">

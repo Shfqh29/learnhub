@@ -1,4 +1,4 @@
-@extends('layouts.learnhub')
+@extends('Module1.teacher.layout')
 
 @section('content')
     <div class="flex items-center justify-between mb-6">
