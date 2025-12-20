@@ -12,7 +12,7 @@
 
 <div class="flex min-h-screen"> 
    {{-- SIDEBAR --}}
-<aside class="w-[250px] h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6">
+<aside class="w-[270px] h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6">
 
   {{-- BRAND --}}
 <div class="mb-16 px-3 flex items-center space-x-2">
@@ -29,60 +29,54 @@
 
 
     {{-- Dashboard --}}
-<a href="{{ route('dashboard') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module1.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-    <span class="text-lg">🔑</span>
-    <span>Dashboard</span>
-</a>
+    <a href="{{ route('home') }}"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->routeIs('module1.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">🏠</span>
+        <span>Home</span>
+    </a>
 
+    {{-- Manage Teachers --}}
+    <a href="{{ route('administrator.teacherslist') }}"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">👨‍🏫</span>
+        <span>Manage Teachers</span>
+    </a>
 
-    
+    {{-- Manage Students --}}
+    <a href="#"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">🎓</span>
+        <span>Manage Students</span>
+    </a>
 
-    <a href="{{ route('administrator.addteacher') }}"
-           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-           {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-            <span class="text-lg">📚</span>
-            <span>Add Teacher</span>
-        </a>
+    {{-- Manage Course --}}
+    <a href="#"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->routeIs('module4.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">📚</span>
+        <span>Manage Course</span>
+    </a>
 
-        {{-- Content --}}
-    {{--   <a href="{{ route('module3.index') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-    <span class="text-lg">📄</span>
-    <span>Content</span>
-</a>--}}
+    {{-- Settings --}}
+    <a href="{{ url('/settings') }}"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->is('settings') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">⚙️</span>
+        <span>Settings</span>
+    </a>
 
-
-     {{-- Assessment --}}
-{{-- <a href="{{ route('module4.index') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module4.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-    <span class="text-lg">📝</span>
-    <span>Assessment</span>
-</a>--}}
-
-
-        {{-- Settings --}}
-     {{--   <a href="{{ url('/settings') }}"
-           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-           {{ request()->is('settings') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-            <span class="text-lg">⚙️</span>
-            <span>Settings</span>
-        </a>--}}
-
-        {{-- Logout --}}
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit"
-                class="flex items-center space-x-3 px-4 py-3 mt-8 rounded-lg text-gray-300 hover:bg-red-600 transition w-full text-left">
-                <span class="text-lg">➡️</span>
-                <span>Logout</span>
-            </button>
-        </form>
-
-
+    {{-- Logout --}}
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit"
+            class="flex items-center space-x-3 px-4 py-3 mt-4 rounded-lg text-gray-300 hover:bg-red-600 transition w-full text-left">
+        <span class="text-lg">🚪</span>
+            <span>Logout</span>
+        </button>
+    </form>
     </nav>
 </aside>
 
@@ -90,7 +84,7 @@
     {{-- MAIN CONTENT WRAPPER --}}
     <div class="flex-1 flex flex-col">
 
-        {{-- TOP BAR --}}
+    {{-- TOP BAR --}}
        <header class="bg-[#49c987] px-10 py-4 flex justify-between items-center">
     {{-- Greeting --}}
     <span class="text-white font-bold text-lg">Welcome Admin !</span>
@@ -108,20 +102,20 @@
     </div>
 </header>
 
-        {{-- PAGE CONTENT --}}
-<main 
-     style="
-        background-image: url('{{ asset('images/bg.jpg') }}');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-    "
-    class="flex-1 p-10 overflow-auto"
->
-<div class="backdrop-blur-sm bg-white/70 rounded-xl p-8 shadow-lg max-w-4xl mx-auto">
-        @yield('content')
-    </div>
-</main>
+    {{-- PAGE CONTENT --}}
+    <main 
+        style="
+            background-image: url('{{ asset('images/bg.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        "
+        class="flex-1 p-10 overflow-auto"
+    >
+    <div class="backdrop-blur-sm bg-white/70 rounded-xl p-8 shadow-lg max-w-4xl mx-auto">
+            @yield('content')
+        </div>
+    </main>
 
 
     </div>

@@ -18,7 +18,7 @@ class LoginController extends Controller
 
         if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('dashboard'); // single entry point
+            return redirect()->route('home'); // single entry point
         }
 
         return back()->withErrors([

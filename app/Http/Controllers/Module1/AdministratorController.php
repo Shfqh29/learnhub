@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Hash;
 
 class AdministratorController extends Controller
 {
+    // List all teachers
+    public function showTeachersList()
+    {
+        // Get all users with role 'teacher'
+        $teachers = User::where('role', 'teacher')->get();
+
+        // Pass to view
+        return view('Module1.administrator.teacherslist', compact('teachers'));
+    }
+
     // Show the Add Teacher form
     public function showAddTeacherForm()
     {
@@ -30,10 +40,10 @@ class AdministratorController extends Controller
             'form' => null, // teacher does not have form
             'password' => Hash::make($validated['password']),
             'role' => 'teacher',      // automatically set role
-            'status' => 'active',     // active by default
+            'status' => 'Active',     // active by default
         ]);
 
-        return redirect()->route('administrator.addteacher')
+        return redirect()->route('administrator.teacherslist')
                          ->with('success', 'Teacher added successfully!');
     }
 }

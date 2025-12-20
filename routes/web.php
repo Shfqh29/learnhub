@@ -34,7 +34,12 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // DASHBOARD
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/home', [DashboardController::class, 'index'])->name('home');
+
+// MANAGE TEACHERS
+// TEACHERS 
+Route::get('/administrator/teacherslist', [AdministratorController::class, 'showTeachersList'])
+    ->name('administrator.teacherslist');
 
 // ADMIN ADD TEACHER
 Route::get('/administrator/addteacher', [AdministratorController::class, 'showAddTeacherForm'])
