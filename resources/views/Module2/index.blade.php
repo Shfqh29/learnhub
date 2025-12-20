@@ -2,6 +2,8 @@
 
 @section('content')
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     {{-- PAGE HEADER --}}
     <div class="flex justify-between items-center mb-10">
 
@@ -25,14 +27,25 @@
         </div>
     </div>
 
-    {{-- SUCCESS MESSAGE --}}
-    @if(session('success'))
-    <div x-data="{ show: true }" x-show="show"
-         class="fixed top-5 right-5 bg-green-500 text-white px-5 py-3 rounded shadow-lg"
-         x-init="setTimeout(() => show = false, 3000)">
-        {{ session('success') }}
-    </div>
-    @endif
+{{-- SUCCESS MESSAGE --}}
+@if(session('success'))
+<div id="flash-message"
+     class="fixed top-5 left-1/2 transform -translate-x-1/2
+            bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-center transition-opacity duration-500">
+    {{ session('success') }}
+</div>
+
+<script>
+    // Auto hide flash message after 3 seconds
+    setTimeout(() => {
+        const flash = document.getElementById('flash-message');
+        if(flash){
+            flash.style.opacity = '0'; // fade out
+            setTimeout(() => flash.remove(), 500); // remove from DOM after fade
+        }
+    }, 3000);
+</script>
+@endif
 
     {{-- ADD NEW COURSE BUTTON --}}
     <div class="mb-8">
@@ -44,28 +57,40 @@
     </div>
 
     {{-- COURSES GRID --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 auto-rows-fr">
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 auto-rows-fr">
 
         @foreach($courses as $course)
-        <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col min-h-[400px]">
+        <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col min-h-[300px]">
             
             {{-- IMAGE --}}
             <img src="{{ $course->image_url ? asset('storage/' . $course->image_url) : 'https://via.placeholder.com/400x200' }}"
                  alt="{{ $course->title }}"
                  class="w-full h-40 object-cover">
 
+        <div class="flex justify-center py-2 bg-gray-50">
+   @if($course->status === 'approved')
+    <span class="px-4 py-1 rounded-full bg-green-100 text-green-800 text-xs font-semibold">
+        APPROVED
+    </span>
+@elseif($course->status === 'rejected')
+    <span class="px-4 py-1 rounded-full bg-red-100 text-red-800 text-xs font-semibold">
+        REJECTED
+    </span>
+@else
+    <span class="px-4 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-semibold">
+        PENDING APPROVAL
+    </span>
+@endif
+</div>
+
             {{-- CARD BODY --}}
             <div class="p-5 flex flex-col flex-grow">
 
                 <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $course->title }}</h3>
 
-                <div class="flex items-center text-gray-500 text-sm mb-2">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z" />
-                    </svg>
-                    {{ $course->teacher_id ? $course->teacher->name ?? 'Teacher' : 'Teacher' }}
-                </div>
+             <div class="text-gray-500 text-sm mb-2">
+    Teacher {{ $course->coordinator ?? 'No Coordinator' }}
+</div>
 
                 {{-- DIFFICULTY --}}
                 <div class="mb-6"> 
@@ -88,16 +113,66 @@
                        class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
                         View
                     </a>
+<form id="delete-form-{{ $course->id }}" action="{{ route('module2.destroy', $course->id) }}" method="POST">
+    @csrf
+    @method('DELETE')
+    <button type="button" onclick="confirmDelete({{ $course->id }})"
+            class="px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition">
+        Delete
+    </button>
+</form>
 
-                    <form action="{{ route('module2.destroy', $course->id) }}" method="POST"
-                          onsubmit="return confirm('Are you sure you want to delete this course?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                                class="px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition">
-                            Delete
-                        </button>
-                    </form>
+<script>
+function confirmDelete(courseId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This course will be permanently deleted!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'Cancel',
+        customClass: {
+            confirmButton: 'swal2-confirm-button',
+            cancelButton: 'swal2-cancel-button'
+        },
+        buttonsStyling: false // kita disable default styling supaya class kita berfungsi
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + courseId).submit();
+        }
+    });
+}
+</script>
+
+<style>
+.swal2-confirm-button,
+.swal2-cancel-button {
+    width: 100px; /* boleh ubah ikut size yang kau nak */
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+.swal2-confirm-button {
+    background-color: #d33;
+    color: #fff;
+}
+
+.swal2-cancel-button {
+    background-color: #3085d6;
+    color: #fff;
+    margin-left: 10px; /* space antara button */
+}
+
+.swal2-actions {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 10px;
+}
+</style>
+
                 </div>
 
             </div>

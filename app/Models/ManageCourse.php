@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class ManageCourse extends Model
 {
     protected $fillable = [
-        'title',
-        'description',
-        'teacher_id',
-        'difficulty',   
-        'image_url',    
-    ];
-
+    'title',
+    'description',
+    'teacher_id',
+    'difficulty',
+    'image_url',
+    'coordinator',
+    'status', 
+];
     // optional, relation ke instructor (users table nanti)
     public function teacher()
     {

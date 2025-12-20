@@ -44,11 +44,40 @@ Route::post('/administrator/addteacher', [AdministratorController::class, 'store
     ->name('administrator.addteacher.post');
 
 
+/*
+|--------------------------------------------------------------------------
+| Module 1 – Authentication (member buat)
+|--------------------------------------------------------------------------
+*/
+Route::get('/module1', [ManageAuthenticationController::class, 'index'])
+    ->name('module1.index');
 
-
+// Module 2 – Manage Course
 Route::resource('module2', ManageCourseController::class);
 
 Route::get('/module4', [ManageAssessmentController::class, 'index'])->name('module4.index');
+
+
+/*
+|--------------------------------------------------------------------------
+| Module 2 – Manage Course (BUAT SEMENTARA TANPA LOGIN)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/student/module2', [ManageCourseController::class, 'indexStudent'])
+    ->name('module2.student');
+
+Route::resource('module2', ManageCourseController::class);
+
+// Admin view & approve (sementara pun open)
+Route::get('/admin/module2', [ManageCourseController::class, 'indexAdmin'])
+    ->name('module2.admin');
+
+Route::patch('/module2/{id}/reject', [ManageCourseController::class, 'reject'])->name('module2.reject');
+
+Route::patch('/admin/module2/{id}/approve', [ManageCourseController::class, 'approve'])
+    ->name('module2.approve');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -89,4 +118,36 @@ Route::delete('/teacher/content/{id}', [ManageContentController::class, 'destroy
 
 
 
+/*
+|--------------------------------------------------------------------------
+| Module 3 & 4
+|--------------------------------------------------------------------------
+*/
+Route::get('/module3', [ManageContentController::class, 'index'])
+    ->name('module3.index');
+
+Route::get('/module4', [ManageAssessmentController::class, 'index'])
+    ->name('module4.index');
+
+
+/*
+|--------------------------------------------------------------------------
+| Default
+|--------------------------------------------------------------------------
+*/
+Route::get('/', function () {
+    return redirect('/module2'); // optional
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Auth-required routes (PROFILE SAHAJA)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
