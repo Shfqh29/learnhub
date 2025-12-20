@@ -15,7 +15,6 @@ return new class extends Migration
             $table->string('category');
             $table->integer('duration'); // jam
             $table->unsignedBigInteger('teacher_id')->nullable(); // nanti connect ke users table
-            $table->string('coordinator')->nullable();
             $table->timestamps();
             $table->string('image_url')->nullable();
             $table->tinyInteger('difficulty')->default(1); 
