@@ -23,27 +23,42 @@
       <path stroke-linecap="round" stroke-linejoin="round" d="M18 17l-6 4-6-4" /> <!-- pinggiran topi bawah -->
     </svg>
 
-    {{-- System Name --}}
-    <span class="text-white font-extrabold text-2xl">LearnHub</span>
-</div>
+        {{-- System Name --}}
+        <span class="text-white font-extrabold text-2xl">LearnHub</span>
+    </div>
 
 
-    {{-- Dashboard --}}
-<a href="{{ route('dashboard') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module1.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-    <span class="text-lg">🔑</span>
-    <span>Dashboard</span>
-</a>
+    {{-- Home --}}
+    <a href="{{ route('home') }}"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->routeIs('module1.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">🏠</span>
+        <span>Home</span>
+    </a>
 
+    {{-- Course --}}
+    <a href="#"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">📚</span>
+        <span>Course</span>
+    </a>
 
+    {{-- Content --}}
+    <a href="#"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">📄</span>
+        <span>Content</span>
+    </a>
 
-    {{--    <a href="{{ route('administrator.addteacher') }}"
-           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-           {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-            <span class="text-lg">📚</span>
-            <span>Add Teacher</span>
-        </a>--}}
+    {{-- Assessment --}}
+    <a href="{{ route('module4.index') }}"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->routeIs('module4.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">📝</span>
+        <span>Assessment</span>
+    </a>
 
         {{-- Manage Course --}}
 
@@ -61,34 +76,23 @@
     <span class="text-lg">📄</span>
     <span>Content</span>
 </a>--}}
+    {{-- Settings --}}
+    <a href="{{ url('/settings') }}"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->is('settings') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">⚙️</span>
+        <span>Settings</span>
+    </a>
 
-
-     {{-- Assessment --}}
-{{-- <a href="{{ route('module4.index') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module4.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-    <span class="text-lg">📝</span>
-    <span>Assessment</span>
-</a>--}}
-
-
-        {{-- Settings --}}
-     {{--   <a href="{{ url('/settings') }}"
-           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-           {{ request()->is('settings') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-            <span class="text-lg">⚙️</span>
-            <span>Settings</span>
-        </a>--}}
-
-        {{-- Logout --}}
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit"
-                class="flex items-center space-x-3 px-4 py-3 mt-8 rounded-lg text-gray-300 hover:bg-red-600 transition w-full text-left">
-                <span class="text-lg">➡️</span>
-                <span>Logout</span>
-            </button>
-        </form>
+    {{-- Logout --}}
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit"
+            class="flex items-center space-x-3 px-4 py-3 mt-4 rounded-lg text-gray-300 hover:bg-red-600 transition w-full text-left">
+            <span class="text-lg">➡️</span>
+            <span>Logout</span>
+        </button>
+    </form>
 
     </nav>
 </aside>
@@ -113,7 +117,7 @@
         </svg>
         <span>Profile</span>
     </div>
-</header>
+    </header>
 
         {{-- PAGE CONTENT --}}
 <main 

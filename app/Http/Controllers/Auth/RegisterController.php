@@ -48,7 +48,7 @@ class RegisterController extends Controller
             'form' => $validated['form'],
             'password' => bcrypt($validated['password']),
             'role' => 'student',   // auto-assign role
-            'status' => 'active',  // active by default
+            'status' => 'Active',  // active by default
         ]);
 
         return redirect()->route('login')->with('success', 'Account created successfully! You can now log in.');

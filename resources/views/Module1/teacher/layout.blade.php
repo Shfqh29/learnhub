@@ -27,13 +27,13 @@
 </div>
 
 
-    {{-- Dashboard --}}
-<a href="{{ route('dashboard') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module1.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-    <span class="text-lg">🔑</span>
-    <span>Dashboard</span>
-</a>
+    {{-- Home --}}
+    <a href="{{ route('home') }}"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->routeIs('module1.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <span class="text-lg">🏠</span>
+        <span>Home</span>
+    </a>
 
 
     {{-- Manage Course --}}
@@ -44,20 +44,20 @@
         <span>Manage Courses</span>
     </a>
 
-    {{-- Content --}}
+    {{-- Manage Content --}}
     <a href="{{ route('module3.index') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
         {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
         <span class="text-lg">📄</span>
-        <span>Content</span>
+        <span>Manage Content</span>
     </a>
 
-    {{-- Assessment --}}
+    {{-- Manage Assessment --}}
     <a href="{{ route('module4.index') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
         {{ request()->routeIs('module4.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
         <span class="text-lg">📝</span>
-        <span>Assessment</span>
+        <span>Manage Assessment</span>
     </a>
 
     {{-- Settings --}}
@@ -72,8 +72,8 @@
     <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit"
-            class="flex items-center space-x-3 px-4 py-3 mt-8 rounded-lg text-gray-300 hover:bg-red-600 transition w-full text-left">
-            <span class="text-lg">➡️</span>
+            class="flex items-center space-x-3 px-4 py-3 mt-4 rounded-lg text-gray-300 hover:bg-red-600 transition w-full text-left">
+            <span class="text-lg">🚪</span>
             <span>Logout</span>
         </button>
     </form>
@@ -86,9 +86,9 @@
     <div class="flex-1 flex flex-col">
 
         {{-- TOP BAR --}}
-       <header class="bg-[#2563EB] px-10 py-4 flex justify-between items-center">
-    {{-- Greeting --}}
-    <span class="text-white font-bold text-lg">Welcome Teacher !</span>
+        <header class="bg-[#2563EB] px-10 py-4 flex justify-between items-center">
+        {{-- Greeting --}}
+        <span class="text-white font-bold text-lg">Welcome Teacher !</span>
 
     {{-- Profile --}}
     <div class="flex items-center space-x-3 text-white font-bold">
