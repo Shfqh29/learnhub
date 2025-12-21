@@ -89,6 +89,14 @@
                 $icon = 'bi-file-earmark-text-fill text-blue-600';
                 $badge = 'Notes';
             }
+
+            $extension = $item->file_path
+                ? pathinfo($item->file_path, PATHINFO_EXTENSION)
+                : null;
+
+            $downloadName = $extension
+                ? Str::slug($item->item_name) . '.' . $extension
+                : null;
         @endphp
 
         <div
@@ -99,12 +107,10 @@
 
             {{-- LEFT --}}
             <div class="flex gap-4">
-                {{-- ICON --}}
                 <div class="flex-shrink-0">
                     <i class="bi {{ $icon }} text-3xl"></i>
                 </div>
 
-                {{-- INFO --}}
                 <div>
                     {{-- TITLE --}}
                     @if($item->content_type === 'video' && Str::contains($item->description, ['youtube','youtu.be']))
@@ -132,7 +138,7 @@
                         </p>
                     @endif
 
-                    {{-- TYPE BADGE --}}
+                    {{-- BADGE --}}
                     <span class="inline-block mt-2 px-3 py-1 text-xs font-semibold
                                  rounded-full bg-gray-100 text-gray-700">
                         {{ $badge }}
@@ -161,7 +167,7 @@
                         </button>
 
                         <a href="{{ asset('storage/'.$item->file_path) }}"
-                           download
+                           download="{{ $downloadName }}"
                            class="px-3 py-1 text-xs bg-green-100 text-green-600 rounded hover:bg-green-200">
                             Download
                         </a>
@@ -198,13 +204,11 @@
 
 {{-- SCRIPT --}}
 <script>
-/* TOGGLE WEEK */
 function toggleWeek(index) {
     document.getElementById(`week-${index}`).classList.toggle('hidden');
     document.getElementById(`arrow-${index}`).classList.toggle('rotate-180');
 }
 
-/* SEARCH */
 document.getElementById('searchInput').addEventListener('input', function () {
     const value = this.value.toLowerCase();
     document.querySelectorAll('.lesson-item').forEach(item => {
@@ -212,7 +216,6 @@ document.getElementById('searchInput').addEventListener('input', function () {
     });
 });
 
-/* PREVIEW */
 function openPreview(url, type) {
     const modal = document.getElementById('previewModal');
     const iframe = document.getElementById('previewFrame');
@@ -237,7 +240,6 @@ function closePreview() {
     document.getElementById('previewModal').classList.add('hidden');
 }
 
-/* PROGRESS */
 const checks = document.querySelectorAll('.lesson-check');
 checks.forEach(check => {
     const id = check.dataset.id;
@@ -247,6 +249,7 @@ checks.forEach(check => {
         updateProgress();
     });
 });
+
 function updateProgress() {
     const total = checks.length;
     const completed = [...checks].filter(c => c.checked).length;
