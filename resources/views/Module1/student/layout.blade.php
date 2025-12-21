@@ -36,13 +36,15 @@
         <span>Home</span>
     </a>
 
-    {{-- Course --}}
-    <a href="#"
+    {{-- Manage Course --}}
+
+        <a href="{{ route('module2.indexStudent') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-        <span class="text-lg">📚</span>
-        <span>Course</span>
-    </a>
+        {{ request()->routeIs('module2.indexStudent') ? 'bg-[#6366F1] text-white font-bold' : '' }}">
+            <span class="text-lg">📚</span>
+            <span>Course</span>
+        </a>
+
 
     {{-- Content --}}
     <a href="#"
@@ -59,15 +61,6 @@
         <span class="text-lg">📝</span>
         <span>Assessment</span>
     </a>
-
-        {{-- Manage Course --}}
-
-        <a href="{{ route('module2.indexStudent') }}"
-        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->routeIs('module2.indexStudent') ? 'bg-[#6366F1] text-white font-bold' : '' }}">
-            <span class="text-lg">📚</span>
-            <span>Course</span>
-        </a>
 
         {{-- Content --}}
     {{--   <a href="{{ route('module3.index') }}"

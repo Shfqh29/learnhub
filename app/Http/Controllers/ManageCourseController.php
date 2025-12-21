@@ -10,8 +10,11 @@ class ManageCourseController extends Controller
    public function index()
 {
     $courses = ManageCourse::all();
-    return view('module2.index', compact('courses'));
+    $teacher = auth()->user()->name; // Dapatkan nama teacher login
+
+    return view('module2.index', compact('courses', 'teacher'));
 }
+
 
 
     public function create()
@@ -31,13 +34,15 @@ class ManageCourseController extends Controller
     $imagePath = $request->hasFile('image') ? $request->file('image')->store('courses', 'public') : null;
 
     ManageCourse::create([
-        'title' => $request->title,
-        'description' => $request->description,
-        'teacher_id' => 1, // assign terus ID 1
-        'difficulty' => $request->difficulty ?? 1,
-        'image_url' => $imagePath,
-        'status_course' => 'PENDING APPROVAL',
-    ]);
+    'title' => $request->title,
+    'description' => $request->description,
+    'teacher_id' => 1, // assign terus ID 1
+    'coordinator' => $request->coordinator, // tambah line ni
+    'difficulty' => $request->difficulty ?? 1,
+    'image_url' => $imagePath,
+    'status_course' => 'PENDING APPROVAL',
+]);
+
 
     return redirect()->route('module2.index')
                      ->with('success', 'Successfully Add New Course!');
@@ -126,9 +131,9 @@ public function reject($id)
 // Student: list approved courses only
 public function indexStudent()
 {
-    $courses = ManageCourse::where('status_course', 'APPROVED')->get();
-    $studentForm = auth()->user()->form; // contoh: "Form 1"
-    return view('module2.indexStudent', compact('courses', 'studentForm'));
+   $courses = ManageCourse::where('status_course', 'APPROVED')->get();
+$studentForm = auth()->user()->form;
+return view('module2.indexStudent', compact('courses', 'studentForm'));
 }
 
 

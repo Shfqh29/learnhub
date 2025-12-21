@@ -39,38 +39,36 @@
     </a>
 
     {{-- Manage Teachers --}}
-    <a href="{{ route('administrator.teacherslist') }}"
-        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-        <span class="text-lg">👨‍🏫</span>
-        <span>Manage Teachers</span>
-    </a>
+<a href="{{ route('administrator.teacherslist') }}"
+    class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+    {{ request()->routeIs('administrator.teacherslist') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
+    <span class="text-lg">👨‍🏫</span>
+    <span>Manage Teachers</span>
+</a>
 
     {{-- Manage Students --}}
     <a href="#"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        {{ request()->routeIs('module3.*') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
         <span class="text-lg">🎓</span>
         <span>Manage Students</span>
     </a>
 
-    <a href="{{ route('administrator.addteacher') }}"
-           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-           {{ request()->routeIs('module2.*') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
-            <span class="text-lg">📚</span>
-            <span>Add Teacher</span>
-        </a>
+   {{-- Add Teacher --}}
+<a href="{{ route('administrator.addteacher') }}"
+    class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+    {{ request()->routeIs('administrator.addteacher') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
+    <span class="text-lg">📝</span>
+    <span>Add Teacher</span>
+</a>
 
-
-{{-- Courses --}}
-                
-   <a href="{{ route('module2.indexAdmin') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module2.indexAdmin') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
+{{-- Manage Courses --}}
+<a href="{{ route('module2.indexAdmin') }}"
+    class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+    {{ request()->routeIs('module2.indexAdmin') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
     <span class="text-lg">📚</span>
     <span>Manage Courses</span>
 </a>
-
 
         {{-- Content --}}
     {{--   <a href="{{ route('module3.index') }}"
@@ -90,28 +88,10 @@
 </a>--}}
 
 
-        {{-- Settings --}}
-     {{--   <a href="{{ url('/settings') }}"
-           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-           {{ request()->is('settings') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
-            <span class="text-lg">⚙️</span>
-            <span>Settings</span>
-        </a>--}}
-
-        {{-- Logout --}}
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit"
-                class="flex items-center space-x-3 px-4 py-3 mt-8 rounded-lg text-gray-300 hover:bg-red-600 transition w-full text-left">
-                <span class="text-lg">➡️</span>
-                <span>Logout</span>
-            </button>
-        </form>
-
     {{-- Settings --}}
     <a href="{{ url('/settings') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->is('settings') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        {{ request()->is('settings') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
         <span class="text-lg">⚙️</span>
         <span>Settings</span>
     </a>

@@ -29,10 +29,10 @@
     {{-- SUCCESS MESSAGE --}}
     @if(session('success'))
     <div x-data="{ show: true }" x-show="show"
-         class="fixed top-5 right-5 bg-green-500 text-white px-5 py-3 rounded shadow-lg"
-         x-init="setTimeout(() => show = false, 3000)">
-        {{ session('success') }}
-    </div>
+     class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-8 py-4 rounded-xl shadow-xl text-lg"
+     x-init="setTimeout(() => show = false, 3000)">
+    {{ session('success') }}
+</div>
     @endif
 
     {{-- COURSES GRID --}}
@@ -44,9 +44,15 @@
     x-transition
     class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
 >
-    <div @click.away="show=false"
-       class="bg-white w-full max-w-lg rounded-xl shadow-lg overflow-hidden"
+   <div @click.away="show=false" class="bg-white w-full max-w-lg rounded-xl shadow-lg overflow-hidden relative"
 >
+    
+   {{-- CLOSE BUTTON --}}
+<button @click="show=false" 
+        class="absolute top-3 right-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center text-lg">
+    &times;
+</button>
+
 
         {{-- IMAGE --}}
 <img :src="course.image"
@@ -134,15 +140,16 @@
 <div 
     class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col
  cursor-pointer"
-   @click="openModal({
+  @click="openModal({
     id: {{ $course->id }},
     title: @js($course->title),
     description: @js($course->description),
-    teacher: @js($course->teacher->name ?? 'Teacher'),
+    teacher: @js($course->coordinator ?? $course->teacher->name ?? 'Teacher'),
     difficulty: {{ $course->difficulty }},
     status: @js($course->status_course),
     image: @js($course->image_url ? asset('storage/'.$course->image_url) : 'https://via.placeholder.com/400x200')
 })"
+
 >                
                 {{-- IMAGE --}}
                 <img src="{{ $course->image_url ? asset('storage/' . $course->image_url) : 'https://via.placeholder.com/400x200' }}"
@@ -172,7 +179,7 @@
     {{-- TEACHER --}}
     <p class="text-sm text-gray-600 text-center mb-4">
         <span class="font-medium text-gray-700">Teacher :</span>
-        {{ $course->teacher_id ? $course->teacher->name ?? 'Teacher' : 'Teacher' }}
+    {{ $course->coordinator ?? $course->teacher->name ?? 'Teacher' }}
     </p>
 
     {{-- DIFFICULTY --}}

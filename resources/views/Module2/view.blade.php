@@ -39,8 +39,8 @@
 
 {{-- TEACHER --}}
 <div class="text-gray-600 text-sm text-center mb-4">
-    <span class="font-medium">Teacher :</span>
-    {{ $course->teacher_id ? $course->teacher->name ?? 'Teacher' : 'Teacher' }}
+    <span class="font-medium">Coordinator :</span>
+    {{ $course->coordinator ?? 'Teacher' }}
 </div>
 
 {{-- DIFFICULTY --}}

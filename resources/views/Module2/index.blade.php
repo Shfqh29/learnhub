@@ -26,13 +26,14 @@
     </div>
 
     {{-- SUCCESS MESSAGE --}}
-    @if(session('success'))
-    <div x-data="{ show: true }" x-show="show"
-         class="fixed top-5 right-5 bg-green-500 text-white px-5 py-3 rounded shadow-lg"
-         x-init="setTimeout(() => show = false, 3000)">
-        {{ session('success') }}
-    </div>
-    @endif
+   @if(session('success'))
+<div x-data="{ show: true }" x-show="show"
+     class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 
+            text-white px-8 py-3 rounded-xl shadow-lg text-lg"
+     x-init="setTimeout(() => show = false, 3000)">
+    {{ session('success') }}
+</div>
+@endif
 
     {{-- ADD NEW COURSE BUTTON --}}
     <div class="mb-8">
@@ -46,12 +47,30 @@
     {{-- COURSES GRID --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 auto-rows-fr">
     @foreach($courses as $course)
-    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col min-h-[400px]">
+    @php
+    preg_match('/Form\s*([1-5])/i', $course->title, $matches);
+    $courseForm = $matches[1] ?? null;
+
+    $teacherAccess = match($teacher) {
+        'Muhammad Yusuf' => [1,2,3],
+        'Nur Nadia' => [4,5],
+        default => []
+    };
+
+    $isAllowed = $courseForm && in_array($courseForm, $teacherAccess);
+@endphp
+
+<div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col min-h-[400px] {{ !$isAllowed ? 'opacity-40 pointer-events-none' : '' }}">
         
         {{-- IMAGE --}}
         <img src="{{ $course->image_url ? asset('storage/' . $course->image_url) : 'https://via.placeholder.com/400x200' }}"
              alt="{{ $course->title }}"
              class="w-full h-40 object-cover">
+
+        @if(!$isAllowed)
+    <p class="text-red-600 font-bold text-center mt-2">Not Accessible by You</p>
+@endif
+
 
         {{-- STATUS --}}
 <div class="flex justify-center mb-1 mt-2"> {{-- mb-1 instead of mb-2 --}}
@@ -72,9 +91,9 @@
 
             {{-- TEACHER --}}
             <div class="text-gray-500 text-sm mb-2">
-                <span class="font-medium">Teacher :</span>
-                {{ $course->teacher_id ? $course->teacher->name ?? 'Teacher' : 'Teacher' }}
-            </div>
+    <span class="font-medium">Coordinator :</span>
+    {{ $course->coordinator ?? 'Teacher' }}
+</div>
 
 
             {{-- DIFFICULTY --}}
@@ -94,21 +113,38 @@
 
             {{-- BUTTONS --}}
             <div class="flex justify-between items-center mt-auto pt-6 w-full">
-                <a href="{{ route('module2.show', $course->id) }}"
-                   class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
-                    View
-                </a>
 
-                <form action="{{ route('module2.destroy', $course->id) }}" method="POST"
-                      onsubmit="return confirm('Are you sure you want to delete this course?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit"
-                            class="px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition">
-                        Delete
-                    </button>
-                </form>
-            </div>
+    @if($isAllowed)
+        {{-- ALLOWED VIEW --}}
+        <a href="{{ route('module2.show', $course->id) }}"
+           class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
+            View
+        </a>
+
+        {{-- ALLOWED DELETE --}}
+        <form action="{{ route('module2.destroy', $course->id) }}" method="POST"
+              onsubmit="return confirm('Are you sure you want to delete this course?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit"
+                    class="px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition">
+                Delete
+            </button>
+        </form>
+
+    @else
+        {{-- NOT ALLOWED BTN --}}
+        <button class="px-4 py-2 bg-gray-400 text-white text-sm rounded-lg cursor-not-allowed">
+            Not Allowed
+        </button>
+
+        <button class="px-4 py-2 bg-gray-400 text-white text-sm rounded-lg cursor-not-allowed">
+            Not Allowed
+        </button>
+    @endif
+
+</div>
+
 
         </div>
 

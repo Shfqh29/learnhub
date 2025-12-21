@@ -111,7 +111,7 @@ $isAccessible = $normalizedStudentForm && $normalizedCourseForm &&
             id: {{ $course->id }},
             title: @js($course->title),
             description: @js($course->description),
-            teacher: @js($course->teacher->name ?? 'Teacher'),
+           teacher: @js($course->coordinator ?? $course->teacher->name ?? 'Teacher'),
             difficulty: {{ $course->difficulty }},
             status: @js($course->status_course),
             image: @js($course->image_url ? asset('storage/'.$course->image_url) : 'https://via.placeholder.com/400x200')
@@ -154,9 +154,10 @@ $isAccessible = $normalizedStudentForm && $normalizedCourseForm &&
     </h3>
 
     {{-- TEACHER --}}
-   <p class="text-sm text-gray-600 text-center mt-1 mb-1  ">
-    <strong>Teacher:</strong> {{ $course->teacher->name ?? 'Teacher' }}
+   <p class="text-sm text-gray-600 text-center mt-1 mb-1">
+    <strong>Teacher:</strong> {{ $course->coordinator ?? $course->teacher->name ?? 'Teacher' }}
 </p>
+
 
                 {{-- DIFFICULTY --}}
                 <div class="text-center">
