@@ -9,15 +9,20 @@ class Content extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'course_id',
-        'title',
-        'file_path',
-        'file_type',
-    ];
+    protected $table = 'contents'; // 🔴 IMPORTANT
 
-    public function course()
+    protected $fillable = [
+    'course_id',
+    'title_id',
+    'item_name',
+    'description',
+    'content_type',
+    'file_path',
+    'file_type',
+];
+
+    public function title()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Title::class, 'title_id');
     }
 }

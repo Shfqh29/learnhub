@@ -22,34 +22,58 @@ Route::get('/module4', [ManageAssessmentController::class, 'index'])->name('modu
 
 /*
 |--------------------------------------------------------------------------
-| Module 3 (TEMPORARY: allow without login)
-| ONLY CHANGE: Module 3 routes are NOT inside auth group.
+| Module 3 – Manage Content (Teacher)
 |--------------------------------------------------------------------------
 */
 
-// Entry page for Module 3 (course list)
+// Entry page for Module 3 (Form → Course list)
 Route::get('/module3', [ManageContentController::class, 'module3'])
     ->name('module3.index');
 
-// Content CRUD (course-based)
-Route::get('/teacher/course/{course}/content', [ManageContentController::class, 'index'])
-    ->name('content.index');
+// Course → Content
+Route::get('/teacher/course/{course}/content',
+    [ManageContentController::class, 'index']
+)->name('content.index');
 
-Route::get('/teacher/course/{course}/content/create', [ManageContentController::class, 'create'])
-    ->name('content.create');
+// Add Week (Title)
+Route::get('/teacher/course/{course}/title/create',
+    [ManageContentController::class, 'createTitle']
+)->name('title.create');
 
-Route::post('/teacher/course/{course}/content', [ManageContentController::class, 'store'])
-    ->name('content.store');
+Route::post('/teacher/course/{course}/title',
+    [ManageContentController::class, 'storeTitle']
+)->name('title.store');
 
-Route::get('/teacher/content/{id}/edit', [ManageContentController::class, 'edit'])
-    ->name('content.edit');
+// Add Content
+Route::get('/teacher/course/{course}/content/create',
+    [ManageContentController::class, 'create']
+)->name('content.create');
 
-Route::put('/teacher/content/{id}', [ManageContentController::class, 'update'])
-    ->name('content.update');
+Route::post('/teacher/course/{course}/content',
+    [ManageContentController::class, 'store']
+)->name('content.store');
 
-Route::delete('/teacher/content/{id}', [ManageContentController::class, 'destroy'])
-    ->name('content.destroy');
-    
+// Edit / Update / Delete Content
+Route::get('/teacher/content/{id}/edit',
+    [ManageContentController::class, 'edit']
+)->name('content.edit');
+
+Route::put('/teacher/content/{id}',
+    [ManageContentController::class, 'update']
+)->name('content.update');
+
+Route::delete('/teacher/content/{id}',
+    [ManageContentController::class, 'destroy']
+)->name('content.destroy');
+
+// STUDENT VIEW (NO LOGIN YET)
+Route::get('/student/module3', [ManageContentController::class, 'module3'])
+    ->name('student.courses');
+
+Route::get('/student/course/{course}/content',
+    [ManageContentController::class, 'index']
+)->name('student.content.index');
+
 
 Route::get('/dashboard', function () {
     return redirect()->route('module3.index');  // you can change to module2 or homepage later

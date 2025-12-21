@@ -1,43 +1,128 @@
 @extends('layouts.learnhub')
 
 @section('content')
-    <h1 class="text-3xl font-bold text-black mb-6">Edit Content</h1>
+@php
+    $form = request('form');
+@endphp
 
-    @if($errors->any())
-        <div class="mb-4 p-3 rounded bg-red-100 text-red-800">
-            <ul class="list-disc ml-5">
-                @foreach($errors->all() as $e)
-                    <li>{{ $e }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+<div class="max-w-2xl mx-auto">
 
-    <form method="POST" action="{{ route('content.update', $content->id) }}" enctype="multipart/form-data"
-          class="bg-white rounded-xl shadow p-6 space-y-4">
-        @csrf
-        @method('PUT')
+    <div class="bg-white rounded-xl shadow border">
 
-        <div>
-            <label class="block font-semibold mb-1">Title</label>
-            <input type="text" name="title" value="{{ $content->title }}"
-                   class="w-full border rounded-lg px-4 py-2" required>
+        {{-- HEADER --}}
+        <div class="px-6 py-4 border-b">
+            <h2 class="text-lg font-semibold text-gray-800">
+                Edit Learning Content
+            </h2>
         </div>
 
-        <div>
-            <label class="block font-semibold mb-1">Replace File (optional)</label>
-            <input type="file" name="file" class="w-full border rounded-lg px-4 py-2">
-        </div>
+        {{-- FORM --}}
+        <form method="POST"
+              action="{{ route('content.update', $content->id) }}"
+              enctype="multipart/form-data"
+              class="px-6 py-6 space-y-4">
+            @csrf
+            @method('PUT')
 
-        <div class="flex gap-3">
-            <button class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                Update
-            </button>
+            {{-- WEEK --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Week
+                </label>
+                <select name="title_id"
+                        class="w-full border rounded-lg px-3 py-2 text-sm"
+                        required>
+                    @foreach($titles as $title)
+                        <option value="{{ $title->id }}"
+                            {{ $content->title_id == $title->id ? 'selected' : '' }}>
+                            {{ $title->title }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-            <a href="{{ route('content.index', $content->course_id) }}"
-               class="px-5 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
-                Back
-            </a>
-        </div>
-    </form>
+            {{-- NAME --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Content Name
+                </label>
+                <input type="text"
+                       name="item_name"
+                       value="{{ $content->item_name }}"
+                       class="w-full border rounded-lg px-3 py-2 text-sm"
+                       required>
+            </div>
+
+            {{-- TYPE --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Content Type
+                </label>
+                <select name="content_type"
+                        id="contentType"
+                        class="w-full border rounded-lg px-3 py-2 text-sm"
+                        required>
+                    @foreach(['notes','pdf','image','video'] as $type)
+                        <option value="{{ $type }}"
+                            {{ $content->content_type === $type ? 'selected' : '' }}>
+                            {{ ucfirst($type) }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- DESCRIPTION / LINK --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Description / Video Link
+                </label>
+                <textarea name="description"
+                          rows="3"
+                          class="w-full border rounded-lg px-3 py-2 text-sm">{{ $content->description }}</textarea>
+            </div>
+
+            {{-- FILE --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Replace File
+                </label>
+                <input type="file"
+                       name="file"
+                       id="fileInput"
+                       class="w-full border rounded-lg px-3 py-2 text-sm">
+                <p class="text-xs text-gray-500 mt-1">
+                    Disabled for video content
+                </p>
+            </div>
+
+            {{-- ACTIONS --}}
+            <div class="flex justify-end gap-2 pt-4 border-t">
+                <a href="{{ route('content.index', $course->id) }}?form={{ $form }}"
+                   class="px-4 py-2 text-sm bg-gray-400 text-white rounded">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="px-4 py-2 text-sm bg-green-600 text-white rounded">
+                    Update
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById('contentType').dispatchEvent(new Event('change'));
+document.getElementById('contentType').addEventListener('change', function () {
+    const fileInput = document.getElementById('fileInput');
+    if (this.value === 'video') {
+        fileInput.disabled = true;
+        fileInput.value = '';
+        fileInput.classList.add('opacity-50');
+    } else {
+        fileInput.disabled = false;
+        fileInput.classList.remove('opacity-50');
+    }
+});
+</script>
 @endsection

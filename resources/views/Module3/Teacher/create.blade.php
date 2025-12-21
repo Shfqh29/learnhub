@@ -1,41 +1,136 @@
 @extends('layouts.learnhub')
 
 @section('content')
-    <h1 class="text-3xl font-bold text-black mb-6">Add Content - {{ $course->title }}</h1>
+@php
+    $form = request('form');
+@endphp
 
-    @if($errors->any())
-        <div class="mb-4 p-3 rounded bg-red-100 text-red-800">
-            <ul class="list-disc ml-5">
-                @foreach($errors->all() as $e)
-                    <li>{{ $e }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+<div class="max-w-2xl mx-auto">
 
-    <form method="POST" action="{{ route('content.store', $course->id) }}" enctype="multipart/form-data"
-          class="bg-white rounded-xl shadow p-6 space-y-4">
-        @csrf
+    <div class="bg-white rounded-xl shadow border">
 
-        <div>
-            <label class="block font-semibold mb-1">Title</label>
-            <input type="text" name="title" class="w-full border rounded-lg px-4 py-2" required>
+        {{-- HEADER --}}
+        <div class="px-6 py-4 border-b">
+            <h2 class="text-lg font-semibold text-gray-800">
+                Add Learning Content
+            </h2>
+            <p class="text-sm text-gray-500 mt-1">
+                Upload files or paste video links
+            </p>
         </div>
 
-        <div>
-            <label class="block font-semibold mb-1">File</label>
-            <input type="file" name="file" class="w-full border rounded-lg px-4 py-2" required>
-        </div>
+        {{-- FORM --}}
+        <form method="POST"
+              action="{{ route('content.store', $course->id) }}"
+              enctype="multipart/form-data"
+              class="px-6 py-6 space-y-4">
+            @csrf
 
-        <div class="flex gap-3">
-            <button class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                Upload
-            </button>
+            {{-- WEEK --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Week
+                </label>
+                <select name="title_id"
+                        class="w-full border rounded-lg px-3 py-2 text-sm"
+                        required>
+                    <option value="">-- Select Week --</option>
+                    @foreach($titles as $title)
+                        <option value="{{ $title->id }}"
+                            {{ isset($selectedTitle) && $selectedTitle == $title->id ? 'selected' : '' }}>
+                            {{ $title->title }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-            <a href="{{ route('content.index', $course->id) }}"
-               class="px-5 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
-                Back
-            </a>
-        </div>
-    </form>
+            {{-- CONTENT NAME --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Content Name
+                </label>
+                <input type="text"
+                       name="item_name"
+                       class="w-full border rounded-lg px-3 py-2 text-sm"
+                       placeholder="Lecture Video / Notes / Worksheet"
+                       required>
+            </div>
+
+            {{-- CONTENT TYPE --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Content Type
+                </label>
+                <select name="content_type"
+                        id="contentType"
+                        class="w-full border rounded-lg px-3 py-2 text-sm"
+                        required>
+                    <option value="">-- Select Type --</option>
+                    <option value="notes">Notes</option>
+                    <option value="pdf">PDF</option>
+                    <option value="image">Image</option>
+                    <option value="video">Video (YouTube / Drive link)</option>
+                </select>
+            </div>
+
+            {{-- DESCRIPTION / LINK --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Description / Video Link
+                </label>
+                <textarea name="description"
+                          rows="3"
+                          class="w-full border rounded-lg px-3 py-2 text-sm"
+                          placeholder="For video: paste YouTube / Google Drive link here"></textarea>
+                <p class="text-xs text-gray-500 mt-1">
+                    Example: https://www.youtube.com/watch?v=xxxx
+                </p>
+            </div>
+
+            {{-- FILE --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Upload File
+                </label>
+                <input type="file"
+                       name="file"
+                       id="fileInput"
+                       class="w-full border rounded-lg px-3 py-2 text-sm">
+                <p class="text-xs text-gray-500 mt-1">
+                    Disabled automatically for video content
+                </p>
+            </div>
+
+            {{-- ACTIONS --}}
+            <div class="flex justify-end gap-2 pt-4 border-t">
+                <a href="{{ route('content.index', $course->id) }}?form={{ $form }}"
+                   class="px-4 py-2 text-sm rounded bg-gray-400 text-white hover:bg-gray-500">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="px-4 py-2 text-sm rounded bg-green-600 text-white hover:bg-green-700">
+                    Save Content
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{{-- SCRIPT --}}
+<script>
+document.getElementById('contentType').addEventListener('change', function () {
+    const fileInput = document.getElementById('fileInput');
+
+    if (this.value === 'video') {
+        fileInput.disabled = true;
+        fileInput.value = '';
+        fileInput.classList.add('opacity-50');
+    } else {
+        fileInput.disabled = false;
+        fileInput.classList.remove('opacity-50');
+    }
+});
+</script>
 @endsection

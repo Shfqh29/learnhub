@@ -1,27 +1,30 @@
 @extends('layouts.learnhub')
 
 @section('content')
-    <h1 class="text-3xl font-bold text-black mb-6">Module 3 - Select Course</h1>
 
-    @if($courses->count() == 0)
-        <div class="p-4 rounded-lg bg-yellow-100 text-yellow-900">
-            No courses found. Please add a course in Module 2 first.
-        </div>
-    @else
-        <div class="space-y-4">
-            @foreach($courses as $course)
-                <div class="bg-white rounded-xl shadow p-5 flex items-center justify-between">
-                    <div>
-                        <div class="text-xl font-semibold text-gray-800">{{ $course->title }}</div>
-                        <div class="text-sm text-gray-500">{{ $course->description ?? 'No description' }}</div>
-                    </div>
+<h1 class="text-2xl font-bold mb-6">
+    Form {{ $form }} — Select Course
+</h1>
 
-                    <a href="{{ route('content.index', $course->id) }}"
-                       class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                        Manage Content
-                    </a>
-                </div>
-            @endforeach
-        </div>
-    @endif
+@if($courses->isEmpty())
+    <p class="text-gray-500 italic">
+        No courses available for this form.
+    </p>
+@endif
+
+@foreach($courses as $course)
+<div class="bg-white p-4 rounded shadow flex justify-between mb-3">
+    <div>
+        <h3 class="font-semibold">{{ $course->title }}</h3>
+        <p class="text-sm text-gray-500">{{ $course->description }}</p>
+    </div>
+
+    {{-- IMPORTANT: PASS FORM --}}
+    <a href="{{ route('content.index', $course->id) }}?form={{ $form }}"
+       class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        Manage Content
+    </a>
+</div>
+@endforeach
+
 @endsection

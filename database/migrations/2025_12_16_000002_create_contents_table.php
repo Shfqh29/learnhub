@@ -10,16 +10,18 @@ return new class extends Migration {
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('course_id');
-            $table->string('title');
-            $table->string('file_path');
-            $table->string('file_type');
-            $table->timestamps();
+            $table->foreignId('course_id')
+                  ->constrained('manage_courses')
+                  ->cascadeOnDelete();
 
-            $table->foreign('course_id')
-                  ->references('id')
-                  ->on('manage_courses')
-                  ->onDelete('cascade');
+            $table->foreignId('title_id')
+                  ->constrained('titles')
+                  ->cascadeOnDelete();
+
+            $table->string('item_name');   // Content name
+            $table->string('file_path');
+            $table->string('file_type');   // pdf, image, video
+            $table->timestamps();
         });
     }
 

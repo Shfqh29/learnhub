@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearnHub</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -12,7 +13,8 @@
 
 <div class="flex min-h-screen"> 
    {{-- SIDEBAR --}}
-<aside class="w-[250px] h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6">
+<aside class="w-[250px] min-h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6">
+
 
   {{-- BRAND --}}
 <div class="mb-16 px-3 flex items-center space-x-2">
@@ -46,13 +48,41 @@
             <span>Manage Courses</span>
         </a>
 
-        {{-- Content --}}
-        <a href="{{ route('module3.index') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-    <span class="text-lg">📄</span>
-    <span>Content</span>
-</a>
+  {{-- CONTENT (SIDEBAR DROPDOWN) --}}
+<div class="group">
+
+    {{-- MAIN CONTENT BUTTON --}}
+    <div
+        class="flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer
+               text-gray-300 hover:bg-[#334155] transition
+               {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        <div class="flex items-center space-x-3">
+            <span class="text-lg">📄</span>
+            <span>Content</span>
+        </div>
+
+        <i class="bi bi-chevron-down text-sm
+           group-hover:rotate-180 transition-transform"></i>
+    </div>
+
+    {{-- DROPDOWN FORMS --}}
+    <div
+        class="ml-6 mt-1 space-y-1
+               max-h-0 overflow-hidden
+               group-hover:max-h-60
+               transition-all duration-300">
+
+        @for ($i = 1; $i <= 5; $i++)
+            <a href="{{ route('module3.index') }}?form={{ $i }}"
+               class="block px-4 py-2 rounded-lg text-sm
+                      text-gray-300 hover:bg-[#334155]
+                      {{ request('form') == $i ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+                Form {{ $i }}
+            </a>
+        @endfor
+
+    </div>
+</div>
 
 
        {{-- Assessment --}}
