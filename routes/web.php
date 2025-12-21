@@ -44,9 +44,31 @@ Route::post('/administrator/addteacher', [AdministratorController::class, 'store
     ->name('administrator.addteacher.post');
 
 
+// Module 2
+//Admin
+Route::get('/module2/admin', [ManageCourseController::class, 'indexAdmin'])
+    ->name('module2.indexAdmin');
 
+Route::put('/module2/{id}/approve', [ManageCourseController::class, 'approve'])
+    ->name('module2.approve');
+
+Route::put('/module2/{id}/reject', [ManageCourseController::class, 'reject'])
+    ->name('module2.reject');
+
+
+ // Student routes
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/module2/student', [ManageCourseController::class, 'indexStudent'])
+        ->name('module2.indexStudent');
+
+    Route::get('/module2/student/{id}', [ManageCourseController::class, 'showStudent'])
+        ->name('module2.showStudent');
+
+});  
 
 Route::resource('module2', ManageCourseController::class);
+
 
 Route::get('/module4', [ManageAssessmentController::class, 'index'])->name('module4.index');
 

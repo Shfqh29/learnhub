@@ -18,7 +18,7 @@
             </h2>
         </div>
 
-        <form action="{{ route('manage_courses.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('module2.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             {{-- VALIDATION ERRORS --}}
     @if ($errors->any())
@@ -123,7 +123,7 @@
                     Reset
                 </button>
 
-                <a href="{{ route('manage_courses.index') }}"
+                <a href="{{ route('module2.index') }}"
                    class="text-gray-600 hover:text-gray-900 font-medium ml-4">
                     Back
                 </a>

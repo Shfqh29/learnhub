@@ -12,8 +12,8 @@
 
 <div class="flex min-h-screen"> 
    {{-- SIDEBAR --}}
-<aside class="w-[250px] h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6">
-
+<aside class="w-[250px] bg-[#312E81] text-gray-300 flex flex-col py-8 px-6
+             sticky top-0 h-screen">
   {{-- BRAND --}}
 <div class="mb-16 px-3 flex items-center space-x-2">
     {{-- Logo topi graduation putih --}}
@@ -37,7 +37,6 @@
 </a>
 
 
-    {{-- Manage Course --}}
 
     {{--    <a href="{{ route('administrator.addteacher') }}"
            class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
@@ -45,6 +44,15 @@
             <span class="text-lg">📚</span>
             <span>Add Teacher</span>
         </a>--}}
+
+        {{-- Manage Course --}}
+
+        <a href="{{ route('module2.indexStudent') }}"
+        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+        {{ request()->routeIs('module2.indexStudent') ? 'bg-[#6366F1] text-white font-bold' : '' }}">
+            <span class="text-lg">📚</span>
+            <span>Course</span>
+        </a>
 
         {{-- Content --}}
     {{--   <a href="{{ route('module3.index') }}"
@@ -90,7 +98,7 @@
     <div class="flex-1 flex flex-col">
 
         {{-- TOP BAR --}}
-       <header class="bg-[#ed374c] px-10 py-4 flex justify-between items-center">
+       <header class="bg-[#4F46E5] px-10 py-4 flex justify-between items-center">
     {{-- Greeting --}}
     <span class="text-white font-bold text-lg">Welcome Student !</span>
 
@@ -115,7 +123,7 @@
         background-repeat: no-repeat;
         background-position: center;
     "
-    class="flex-1 p-10 overflow-auto"
+    class="flex-1 p-10"
 >
 <div class="backdrop-blur-sm bg-white/70 rounded-xl p-8 shadow-lg max-w-4xl mx-auto">
         @yield('content')
@@ -125,6 +133,14 @@
 
     </div>
 </div>
+
+
+<style>
+[x-cloak] { display: none !important; }
+</style>
+
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 
 </body>
 </html>

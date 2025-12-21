@@ -12,8 +12,7 @@
 
 <div class="flex min-h-screen"> 
    {{-- SIDEBAR --}}
-<aside class="w-[250px] h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6">
-
+<aside class="w-[250px] h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6 sticky top-0">
   {{-- BRAND --}}
 <div class="mb-16 px-3 flex items-center space-x-2">
     {{-- Logo topi graduation putih --}}

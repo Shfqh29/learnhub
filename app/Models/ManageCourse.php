@@ -11,7 +11,8 @@ class ManageCourse extends Model
         'description',
         'teacher_id',
         'difficulty',   
-        'image_url',    
+        'image_url',   
+        'status_course', 
     ];
 
     // optional, relation ke instructor (users table nanti)

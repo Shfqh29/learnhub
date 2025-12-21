@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearnHub</title>
 
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -12,7 +14,7 @@
 
 <div class="flex min-h-screen"> 
    {{-- SIDEBAR --}}
-<aside class="w-[250px] h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6">
+<aside class="w-[250px] h-screen sticky top-0 overflow-y-auto bg-[#115E59] text-gray-300 flex flex-col py-8 px-6">
 
   {{-- BRAND --}}
 <div class="mb-16 px-3 flex items-center space-x-2">
@@ -31,7 +33,7 @@
     {{-- Dashboard --}}
 <a href="{{ route('dashboard') }}"
    class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module1.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+   {{ request()->routeIs('module1.*') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
     <span class="text-lg">🔑</span>
     <span>Dashboard</span>
 </a>
@@ -41,15 +43,26 @@
 
     <a href="{{ route('administrator.addteacher') }}"
            class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-           {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+           {{ request()->routeIs('module2.*') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
             <span class="text-lg">📚</span>
             <span>Add Teacher</span>
         </a>
 
+
+{{-- Courses --}}
+                
+   <a href="{{ route('module2.indexAdmin') }}"
+   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+   {{ request()->routeIs('module2.indexAdmin') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
+    <span class="text-lg">📚</span>
+    <span>Manage Courses</span>
+</a>
+
+
         {{-- Content --}}
     {{--   <a href="{{ route('module3.index') }}"
    class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+   {{ request()->routeIs('module3.*') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
     <span class="text-lg">📄</span>
     <span>Content</span>
 </a>--}}
@@ -58,7 +71,7 @@
      {{-- Assessment --}}
 {{-- <a href="{{ route('module4.index') }}"
    class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module4.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+   {{ request()->routeIs('module4.*') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
     <span class="text-lg">📝</span>
     <span>Assessment</span>
 </a>--}}
@@ -67,7 +80,7 @@
         {{-- Settings --}}
      {{--   <a href="{{ url('/settings') }}"
            class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-           {{ request()->is('settings') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+           {{ request()->is('settings') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
             <span class="text-lg">⚙️</span>
             <span>Settings</span>
         </a>--}}
@@ -91,7 +104,7 @@
     <div class="flex-1 flex flex-col">
 
         {{-- TOP BAR --}}
-       <header class="bg-[#49c987] px-10 py-4 flex justify-between items-center">
+       <header class="bg-[#0D9488] px-10 py-4 flex justify-between items-center">
     {{-- Greeting --}}
     <span class="text-white font-bold text-lg">Welcome Admin !</span>
 

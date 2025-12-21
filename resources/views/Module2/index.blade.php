@@ -44,66 +44,78 @@
     </div>
 
     {{-- COURSES GRID --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 auto-rows-fr">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 auto-rows-fr">
+    @foreach($courses as $course)
+    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col min-h-[400px]">
+        
+        {{-- IMAGE --}}
+        <img src="{{ $course->image_url ? asset('storage/' . $course->image_url) : 'https://via.placeholder.com/400x200' }}"
+             alt="{{ $course->title }}"
+             class="w-full h-40 object-cover">
 
-        @foreach($courses as $course)
-        <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col min-h-[400px]">
-            
-            {{-- IMAGE --}}
-            <img src="{{ $course->image_url ? asset('storage/' . $course->image_url) : 'https://via.placeholder.com/400x200' }}"
-                 alt="{{ $course->title }}"
-                 class="w-full h-40 object-cover">
+        {{-- STATUS --}}
+<div class="flex justify-center mb-1 mt-2"> {{-- mb-1 instead of mb-2 --}}
+   <span class="px-3 py-1 text-sm font-semibold rounded
+    {{ $course->status_course == 'PENDING APPROVAL' ? 'bg-yellow-200 text-yellow-800' : '' }}
+    {{ $course->status_course == 'APPROVED' ? 'bg-green-200 text-green-800' : '' }}
+    {{ $course->status_course == 'REJECTED' ? 'bg-red-200 text-red-800' : '' }}">
+    {{ $course->status_course }}
+</span>
+</div>
 
-            {{-- CARD BODY --}}
-            <div class="p-5 flex flex-col flex-grow">
 
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $course->title }}</h3>
+        {{-- CARD BODY --}}
+        <div class="p-6 flex flex-col items-center text-center flex-grow">
 
-                <div class="flex items-center text-gray-500 text-sm mb-2">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z" />
-                    </svg>
-                    {{ $course->teacher_id ? $course->teacher->name ?? 'Teacher' : 'Teacher' }}
+            {{-- TITLE --}}
+<h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">{{ $course->title }}</h3> {{-- mb-3 instead of mb-2 --}}
+
+            {{-- TEACHER --}}
+            <div class="text-gray-500 text-sm mb-2">
+                <span class="font-medium">Teacher :</span>
+                {{ $course->teacher_id ? $course->teacher->name ?? 'Teacher' : 'Teacher' }}
+            </div>
+
+
+            {{-- DIFFICULTY --}}
+            <div class="mb-6 text-center"> 
+                <p class="text-gray-700 text-sm font-medium mb-1">Difficulty of this subject:</p>
+
+                <div class="flex justify-center gap-1">
+                    @for($i = 1; $i <= 5; $i++)
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="w-5 h-5 {{ $i <= $course->difficulty ? 'text-yellow-400' : 'text-gray-300' }}"
+                             fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.97 1.438 8.323L12 18.897 4.626 23.599l1.438-8.323-6.064-5.97 8.332-1.151z"/>
+                        </svg>
+                    @endfor
                 </div>
+            </div>
 
-                {{-- DIFFICULTY --}}
-                <div class="mb-6"> 
-                    <p class="text-gray-700 text-sm font-medium mb-1">Difficulty of this subject:</p>
+            {{-- BUTTONS --}}
+            <div class="flex justify-between items-center mt-auto pt-6 w-full">
+                <a href="{{ route('module2.show', $course->id) }}"
+                   class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
+                    View
+                </a>
 
-                    <div class="flex items-center gap-1">
-                        @for($i = 1; $i <= 5; $i++)
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="w-5 h-5 {{ $i <= $course->difficulty ? 'text-yellow-400' : 'text-gray-300' }}"
-                                 fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.97 1.438 8.323L12 18.897 4.626 23.599l1.438-8.323-6.064-5.97 8.332-1.151z"/>
-                            </svg>
-                        @endfor
-                    </div>
-                </div>
-
-                {{-- BUTTONS --}}
-                <div class="flex justify-between items-center mt-auto pt-6">
-                    <a href="{{ route('module2.show', $course->id) }}"
-                       class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
-                        View
-                    </a>
-
-                    <form action="{{ route('module2.destroy', $course->id) }}" method="POST"
-                          onsubmit="return confirm('Are you sure you want to delete this course?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                                class="px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition">
-                            Delete
-                        </button>
-                    </form>
-                </div>
-
+                <form action="{{ route('module2.destroy', $course->id) }}" method="POST"
+                      onsubmit="return confirm('Are you sure you want to delete this course?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                            class="px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition">
+                        Delete
+                    </button>
+                </form>
             </div>
 
         </div>
-        @endforeach
+
+    </div>
+    @endforeach
+</div>
+
 
     </div>
 
