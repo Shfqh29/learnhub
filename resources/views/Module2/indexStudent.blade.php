@@ -154,7 +154,7 @@ $isAccessible = $normalizedStudentForm && $normalizedCourseForm &&
     </h3>
 
     {{-- TEACHER --}}
-   <p class="text-sm text-gray-600 text-center mt-1 mb-1">
+   <p class="text-sm text-gray-600 text-center mt-1 mb-1  ">
     <strong>Teacher:</strong> {{ $course->teacher->name ?? 'Teacher' }}
 </p>
 
