@@ -38,6 +38,7 @@ class ManageCourseController extends Controller
     'description' => $request->description,
     'teacher_id' => 1, // assign terus ID 1
     'coordinator' => $request->coordinator, // tambah line ni
+    'form' => $request->form, // ✅ THIS IS THE KEY
     'difficulty' => $request->difficulty ?? 1,
     'image_url' => $imagePath,
     'status_course' => 'PENDING APPROVAL',

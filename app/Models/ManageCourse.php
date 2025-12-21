@@ -14,15 +14,18 @@ class ManageCourse extends Model
         'image_url',
         'status_course',
         'coordinator',
+        'form', // ✅ THIS MUST EXIST
     ];
 
+    // Relation to teacher
     public function teacher()
     {
         return $this->belongsTo(User::class, 'teacher_id');
     }
 
+    // Relation to contents (Module 3)
     public function contents()
     {
-        return $this->hasMany(Content::class);
+        return $this->hasMany(Content::class, 'course_id');
     }
 }

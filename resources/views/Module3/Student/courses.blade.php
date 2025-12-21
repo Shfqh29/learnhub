@@ -1,47 +1,68 @@
-@extends('layouts.learnhub')
+@extends('Module1.student.layout')
 
 @section('content')
-@php
-    $form = request('form', 1);
-@endphp
 
-{{-- HEADER --}}
+{{-- PAGE HEADER --}}
 <div class="mb-8">
-    <h1 class="text-2xl font-bold text-gray-800">
-        Learning Materials – Form {{ $form }}
+    <h1 class="text-3xl font-extrabold text-gray-800">
+        Learning Content
     </h1>
-    <p class="text-sm text-gray-500">
-        Select a subject to begin learning
+    <p class="text-gray-500 mt-1">
+        Available courses for <span class="font-semibold">Form {{ $studentForm }}</span>
     </p>
 </div>
 
-{{-- COURSE LIST --}}
-<div class="space-y-4">
+{{-- EMPTY STATE --}}
+@if($courses->isEmpty())
+    <div class="bg-white rounded-xl shadow p-10 text-center">
+        <div class="text-4xl mb-3">📚</div>
+        <h2 class="text-lg font-semibold text-gray-700 mb-1">
+            No courses available
+        </h2>
+        <p class="text-sm text-gray-500">
+            Learning materials for your form will appear here once they are published.
+        </p>
+    </div>
+@else
 
-@forelse($courses as $course)
+{{-- COURSE GRID --}}
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-    <div class="bg-white rounded-xl shadow border p-5 flex justify-between items-center">
+@foreach($courses as $course)
+    <div
+        class="bg-white rounded-xl shadow hover:shadow-xl transition duration-300
+               flex flex-col overflow-hidden">
 
-        <div>
-            <h3 class="font-semibold text-lg text-gray-800">
+        {{-- TOP BAR --}}
+        <div class="bg-gradient-to-r from-indigo-600 to-blue-600 p-4 text-white">
+            <h2 class="font-bold text-lg leading-snug">
                 {{ $course->title }}
-            </h3>
-            <p class="text-sm text-gray-500">
-                {{ $course->description }}
-            </p>
+            </h2>
         </div>
 
-        <a href="{{ route('student.content.index', $course->id) }}?form={{ $form }}"
-           class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
-            View Content
-        </a>
-    </div>
+        {{-- BODY --}}
+        <div class="p-6 flex flex-col flex-grow">
+            <p class="text-sm text-gray-600 line-clamp-3">
+                {{ $course->description }}
+            </p>
 
-@empty
-    <p class="text-gray-500 italic">
-        No courses available for this form.
-    </p>
-@endforelse
+            {{-- FOOTER --}}
+            <div class="mt-auto pt-6 flex justify-between items-center">
+                <span class="text-xs text-gray-400 uppercase tracking-wide">
+                    Form {{ $studentForm }}
+                </span>
+
+                <a href="{{ route('student.module3.contents', $course->id) }}"
+                   class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg
+                          hover:bg-blue-700 transition shadow">
+                    View Content →
+                </a>
+            </div>
+        </div>
+    </div>
+@endforeach
 
 </div>
+@endif
+
 @endsection

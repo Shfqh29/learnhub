@@ -142,19 +142,25 @@ Route::delete('/teacher/content/{id}',
 
 /*
 |--------------------------------------------------------------------------
-| MODULE 3 – CONTENT (STUDENT) ✅ FIXED
+| Module 3 – Student Content
 |--------------------------------------------------------------------------
 */
 
-// Student → Course list (Content menu)
-Route::get('/student/module3',
-    [ManageContentController::class, 'studentCourses']
-)->name('student.module3.courses');
+Route::middleware(['auth'])->group(function () {
 
-// Student → View contents of a course
-Route::get('/student/course/{course}/content',
-    [ManageContentController::class, 'studentContents']
-)->name('student.module3.contents');
+    // Student: list courses by student form
+    Route::get('/student/module3',
+        [ManageContentController::class, 'studentCourses']
+    )->name('student.module3.courses');
+
+    // Student: view contents of selected course
+    Route::get('/student/module3/course/{course}',
+        [ManageContentController::class, 'studentContents']
+    )->name('student.module3.contents');
+
+});
+
+
 
 /*
 |--------------------------------------------------------------------------

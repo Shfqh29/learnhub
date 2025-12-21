@@ -10,41 +10,62 @@ use Illuminate\Support\Facades\Storage;
 
 class ManageContentController extends Controller
 {
+    /* ======================================================
+       HELPER – GET COURSE THAT TEACHER IS ALLOWED TO MANAGE
+    ====================================================== */
+    private function getTeacherCourseOrFail($courseId)
+{
+    $teacherName = auth()->user()->name;
+
+    $allowedForms = match ($teacherName) {
+        'Ahmad Saiful' => [1, 2, 3],
+        'Nur Nadia' => [4, 5],
+        default => [],
+    };
+
+    return ManageCourse::where('id', $courseId)
+        ->whereIn('form', $allowedForms)
+        ->firstOrFail();
+}
+
     /* ===============================
-       MODULE 3 – COURSE LIST (BY FORM)
+       MODULE 3 – TEACHER COURSE LIST
     =============================== */
-    public function module3(Request $request)
-    {
-        $form = $request->query('form', 1); // default Form 1
+   public function module3()
+{
+    $teacherName = auth()->user()->name;
 
-        $courses = ManageCourse::where('form', $form)->get();
+    $allowedForms = match ($teacherName) {
+        'Ahmad Saiful' => [1, 2, 3],
+        'Nur Nadia' => [4, 5],
+        default => [],
+    };
 
-        return view('Module3.Teacher.courses', compact('courses', 'form'));
-    }
+    $courses = ManageCourse::whereIn('form', $allowedForms)->get();
+
+    return view('Module3.Teacher.courses', compact('courses'));
+}
 
     /* ===============================
-       LIST WEEKS + CONTENT
+       LIST WEEKS + CONTENT (TEACHER)
     =============================== */
-    public function index(Request $request, $course)
+    public function index($course)
     {
-        $course = ManageCourse::findOrFail($course);
+        $course = $this->getTeacherCourseOrFail($course);
 
         $titles = Title::where('course_id', $course->id)
-            ->with(['contents' => function ($q) {
-                $q->orderBy('id', 'asc');
-            }])
+            ->with(['contents' => fn ($q) => $q->orderBy('id')])
             ->get();
 
         return view('Module3.Teacher.index', compact('course', 'titles'));
     }
 
     /* ===============================
-       CREATE WEEK (TITLE) FORM
+       CREATE WEEK (TITLE)
     =============================== */
-    public function createTitle(Request $request, $course)
+    public function createTitle($course)
     {
-        $course = ManageCourse::findOrFail($course);
-
+        $course = $this->getTeacherCourseOrFail($course);
         return view('Module3.Teacher.add-title', compact('course'));
     }
 
@@ -57,7 +78,7 @@ class ManageContentController extends Controller
             'title' => 'required|string|max:255',
         ]);
 
-        $course = ManageCourse::findOrFail($course);
+        $course = $this->getTeacherCourseOrFail($course);
 
         Title::create([
             'course_id' => $course->id,
@@ -74,7 +95,7 @@ class ManageContentController extends Controller
     =============================== */
     public function create(Request $request, $course)
     {
-        $course = ManageCourse::findOrFail($course);
+        $course = $this->getTeacherCourseOrFail($course);
 
         $titles = Title::where('course_id', $course->id)->get();
         $selectedTitle = $request->query('title');
@@ -91,6 +112,8 @@ class ManageContentController extends Controller
     =============================== */
     public function store(Request $request, $course)
     {
+        $course = $this->getTeacherCourseOrFail($course);
+
         $request->validate([
             'title_id'     => 'required|exists:titles,id',
             'item_name'    => 'required|string|max:255',
@@ -100,7 +123,7 @@ class ManageContentController extends Controller
         ]);
 
         $title = Title::where('id', $request->title_id)
-            ->where('course_id', $course)
+            ->where('course_id', $course->id)
             ->firstOrFail();
 
         $path = null;
@@ -112,7 +135,7 @@ class ManageContentController extends Controller
         }
 
         Content::create([
-            'course_id'    => $course,
+            'course_id'    => $course->id,
             'title_id'     => $title->id,
             'item_name'    => $request->item_name,
             'description'  => $request->description,
@@ -122,17 +145,17 @@ class ManageContentController extends Controller
         ]);
 
         return redirect()
-            ->route('content.index', $course)
+            ->route('content.index', $course->id)
             ->with('success', 'Content added successfully');
     }
 
     /* ===============================
-       EDIT CONTENT FORM
+       EDIT CONTENT
     =============================== */
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         $content = Content::findOrFail($id);
-        $course  = ManageCourse::findOrFail($content->course_id);
+        $course  = $this->getTeacherCourseOrFail($content->course_id);
 
         $titles = Title::where('course_id', $course->id)->get();
 
@@ -149,6 +172,7 @@ class ManageContentController extends Controller
     public function update(Request $request, $id)
     {
         $content = Content::findOrFail($id);
+        $course  = $this->getTeacherCourseOrFail($content->course_id);
 
         $request->validate([
             'title_id'     => 'required|exists:titles,id',
@@ -175,7 +199,7 @@ class ManageContentController extends Controller
         ]);
 
         return redirect()
-            ->route('content.index', $content->course_id)
+            ->route('content.index', $course->id)
             ->with('success', 'Content updated successfully');
     }
 
@@ -185,6 +209,7 @@ class ManageContentController extends Controller
     public function destroy($id)
     {
         $content = Content::findOrFail($id);
+        $this->getTeacherCourseOrFail($content->course_id);
 
         if ($content->file_path) {
             Storage::disk('public')->delete($content->file_path);
@@ -206,5 +231,39 @@ class ManageContentController extends Controller
             'jpg', 'jpeg', 'png', 'gif' => 'image',
             default => 'document',
         };
+    }
+
+    /* ======================================================
+       STUDENT – COURSE LIST (UNCHANGED)
+    ====================================================== */
+    public function studentCourses()
+    {
+        $student = auth()->user();
+
+        $courses = ManageCourse::where('status_course', 'APPROVED')
+            ->where('form', $student->form)
+            ->get();
+
+        return view('Module3.Student.index', compact('courses'));
+    }
+
+    /* ======================================================
+       STUDENT – VIEW CONTENT (UNCHANGED)
+    ====================================================== */
+    public function studentContents($course)
+    {
+        $student = auth()->user();
+
+        $course = ManageCourse::where('id', $course)
+            ->where('status_course', 'APPROVED')
+            ->where('form', $student->form)
+            ->firstOrFail();
+
+        $titles = Title::with('contents')
+            ->where('course_id', $course->id)
+            ->orderBy('id')
+            ->get();
+
+        return view('Module3.Student.contents', compact('course', 'titles'));
     }
 }

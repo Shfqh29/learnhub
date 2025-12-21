@@ -30,13 +30,14 @@
 </div>
 
 
-    {{-- Dashboard --}}
-<a href="{{ route('module1.index') }}"
+  {{-- Dashboard --}}
+<a href="{{ route('home') }}"
    class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module1.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+   {{ request()->routeIs('home') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
     <span class="text-lg">🔑</span>
     <span>Dashboard</span>
 </a>
+
 
 
     {{-- Manage Course --}}

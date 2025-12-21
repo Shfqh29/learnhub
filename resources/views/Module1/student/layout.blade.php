@@ -6,6 +6,8 @@
     <title>LearnHub</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
 <body class="bg-gray-100 font-sans">
@@ -45,12 +47,13 @@
     </a>
 
     {{-- Content --}}
-    <a href="#"
-        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-        <span class="text-lg">📄</span>
-        <span>Content</span>
-    </a>
+<a href="{{ route('student.module3.courses') }}"
+   class="flex items-center space-x-3 px-4 py-3 rounded-lg
+          text-gray-300 hover:bg-[#334155] transition
+          {{ request()->routeIs('student.module3.*') ? 'bg-[#6366F1] text-white font-bold' : '' }}">
+    <span class="text-lg">📄</span>
+    <span>Content</span>
+</a>
 
     {{-- Assessment --}}
     <a href="#"

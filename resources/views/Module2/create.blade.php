@@ -49,6 +49,27 @@
                           placeholder="Write a description about this course" required></textarea>
             </div>
 
+            {{-- COURSE FORM --}}
+<div class="mb-6">
+    <label class="block text-gray-800 font-semibold mb-2">
+        Student Form
+    </label>
+
+    <select name="form"
+        class="w-full p-3 border border-gray-300 rounded-xl
+               focus:ring-2 focus:ring-blue-500
+               focus:border-blue-500 transition-all
+               shadow-sm hover:shadow-md outline-none"
+        required>
+        <option value="">-- Select Form --</option>
+        <option value="1">Form 1</option>
+        <option value="2">Form 2</option>
+        <option value="3">Form 3</option>
+        <option value="4">Form 4</option>
+        <option value="5">Form 5</option>
+    </select>
+</div>
+
             {{-- COURSE IMAGE --}}
             <div class="mb-6">
                 <label class="block text-gray-800 font-semibold mb-2">Picture of the Course</label>
