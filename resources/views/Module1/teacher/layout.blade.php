@@ -12,9 +12,9 @@
 <body class="bg-gray-100 font-sans">
 
 <div class="flex min-h-screen"> 
-   {{-- SIDEBAR --}}
-<aside class="w-[250px] h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6 sticky top-0">
-  {{-- BRAND --}}
+{{-- SIDEBAR --}}
+<aside class="w-[270px] h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6 sticky top-0">
+{{-- BRAND --}}
 <div class="mb-16 px-3 flex items-center space-x-2">
     {{-- Logo topi graduation putih --}}
     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -31,11 +31,10 @@
     {{-- Home --}}
     <a href="{{ route('home') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->routeIs('module1.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        {{ request()->routeIs('home') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
         <span class="text-lg">🏠</span>
         <span>Home</span>
     </a>
-
 
     {{-- Manage Course --}}
     <a href="{{ route('module2.index') }}"

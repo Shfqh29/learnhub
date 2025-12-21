@@ -11,10 +11,10 @@
 <body class="bg-gray-100 font-sans">
 
 <div class="flex min-h-screen"> 
-   {{-- SIDEBAR --}}
-<aside class="w-[250px] bg-[#312E81] text-gray-300 flex flex-col py-8 px-6
+{{-- SIDEBAR --}}
+<aside class="w-[270px] bg-[#312E81] text-gray-300 flex flex-col py-8 px-6
              sticky top-0 h-screen">
-  {{-- BRAND --}}
+{{-- BRAND --}}
 <div class="mb-16 px-3 flex items-center space-x-2">
     {{-- Logo topi graduation putih --}}
     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -31,20 +31,18 @@
     {{-- Home --}}
     <a href="{{ route('home') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->routeIs('module1.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+        {{ request()->routeIs('home') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
         <span class="text-lg">🏠</span>
         <span>Home</span>
     </a>
 
-    {{-- Manage Course --}}
-
-        <a href="{{ route('module2.indexStudent') }}"
+    {{-- Course --}}
+    <a href="{{ route('module2.indexStudent') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
         {{ request()->routeIs('module2.indexStudent') ? 'bg-[#6366F1] text-white font-bold' : '' }}">
-            <span class="text-lg">📚</span>
-            <span>Course</span>
-        </a>
-
+        <span class="text-lg">📚</span>
+        <span>Course</span>
+    </a>
 
     {{-- Content --}}
     <a href="#"
@@ -55,20 +53,13 @@
     </a>
 
     {{-- Assessment --}}
-    <a href="{{ route('module4.index') }}"
+    <a href="#"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
         {{ request()->routeIs('module4.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
         <span class="text-lg">📝</span>
         <span>Assessment</span>
     </a>
 
-        {{-- Content --}}
-    {{--   <a href="{{ route('module3.index') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module3.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-    <span class="text-lg">📄</span>
-    <span>Content</span>
-</a>--}}
     {{-- Settings --}}
     <a href="{{ url('/settings') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
@@ -96,8 +87,8 @@
 
         {{-- TOP BAR --}}
        <header class="bg-[#4F46E5] px-10 py-4 flex justify-between items-center">
-    {{-- Greeting --}}
-    <span class="text-white font-bold text-lg">Welcome Student !</span>
+        {{-- Greeting --}}
+        <span class="text-white font-bold text-lg">Welcome Student !</span>
 
     {{-- Profile --}}
     <div class="flex items-center space-x-3 text-white font-bold">
@@ -112,20 +103,20 @@
     </div>
     </header>
 
-        {{-- PAGE CONTENT --}}
-<main 
-     style="
-        background-image: url('{{ asset('images/bg.jpg') }}');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-    "
-    class="flex-1 p-10"
->
-<div class="backdrop-blur-sm bg-white/70 rounded-xl p-8 shadow-lg max-w-4xl mx-auto">
-        @yield('content')
-    </div>
-</main>
+    {{-- PAGE CONTENT --}}
+    <main 
+        style="
+            background-image: url('{{ asset('images/bg.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        "
+        class="flex-1 p-10"
+    >
+    <div class="backdrop-blur-sm bg-white/70 rounded-xl p-8 shadow-lg max-w-4xl mx-auto">
+            @yield('content')
+        </div>
+    </main>
 
 
     </div>
