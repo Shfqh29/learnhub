@@ -46,4 +46,43 @@ class AdministratorController extends Controller
         return redirect()->route('administrator.teacherslist')
                          ->with('success', 'Teacher added successfully!');
     }
+
+    // Show edit form
+    public function editTeacher($id)
+    {
+        $teacher = User::where('role', 'teacher')->findOrFail($id);
+        return view('Module1.administrator.editteacher', compact('teacher'));
+    }
+
+    // Update teacher
+    public function updateTeacher(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'status' => 'required'
+        ]);
+
+        $teacher = User::where('role', 'teacher')->findOrFail($id);
+
+        $teacher->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'status' => $request->status,
+        ]);
+
+        return redirect()
+            ->route('administrator.teacherslist')
+            ->with('success', 'Teacher updated successfully');
+    }
+
+    public function destroyTeacher($id)
+    {
+        $teacher = User::where('role', 'teacher')->findOrFail($id);
+        $teacher->delete();
+
+        return redirect()->route('administrator.teacherslist')
+                        ->with('success', 'Teacher deleted successfully!');
+    }
+
 }

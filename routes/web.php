@@ -48,6 +48,19 @@ Route::get('/administrator/addteacher', [AdministratorController::class, 'showAd
 Route::post('/administrator/addteacher', [AdministratorController::class, 'storeTeacher'])
     ->name('administrator.addteacher.post');
 
+ // Edit form
+Route::get('/administrator/teachers/{id}/edit', [AdministratorController::class, 'editTeacher'])
+    ->name('administrator.teachers.edit');
+
+// Update action
+Route::put('/administrator/teachers/{id}', [AdministratorController::class, 'updateTeacher'])
+    ->name('administrator.teachers.update');
+
+// Delete Teacher
+Route::delete('/administrator/teachers/{id}', [AdministratorController::class, 'destroyTeacher'])
+    ->name('administrator.teachers.destroy');
+
+
 
 // Module 2
 //Admin
