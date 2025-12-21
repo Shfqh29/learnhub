@@ -1,34 +1,108 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ManageAuthenticationController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Module1\DashboardController;
+use App\Http\Controllers\Module1\AdministratorController;
 use App\Http\Controllers\ManageCourseController;
 use App\Http\Controllers\ManageContentController;
 use App\Http\Controllers\ManageAssessmentController;
 
 /*
 |--------------------------------------------------------------------------
-| Your existing module routes (UNCHANGED)
+| MODULE 1 – AUTH & DASHBOARD
 |--------------------------------------------------------------------------
 */
 
-Route::get('/module1', [ManageAuthenticationController::class, 'index'])->name('module1.index');
+// Root
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
-Route::resource('module2', ManageCourseController::class);
+// Auth
+Route::get('/login', fn () => view('Module1.auth.login'))->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/module4', [ManageAssessmentController::class, 'index'])->name('module4.index');
+Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 
+// Dashboard
+Route::get('/home', [DashboardController::class, 'index'])->name('home');
 
 /*
 |--------------------------------------------------------------------------
-| Module 3 – Manage Content (Teacher)
+| MODULE 1 – ADMIN (Teachers)
 |--------------------------------------------------------------------------
 */
 
-// Entry page for Module 3 (Form → Course list)
-Route::get('/module3', [ManageContentController::class, 'module3'])
-    ->name('module3.index');
+Route::get('/administrator/teacherslist',
+    [AdministratorController::class, 'showTeachersList']
+)->name('administrator.teacherslist');
+
+Route::get('/administrator/addteacher',
+    [AdministratorController::class, 'showAddTeacherForm']
+)->name('administrator.addteacher');
+
+Route::post('/administrator/addteacher',
+    [AdministratorController::class, 'storeTeacher']
+)->name('administrator.addteacher.post');
+
+Route::get('/administrator/teachers/{id}/edit',
+    [AdministratorController::class, 'editTeacher']
+)->name('administrator.teachers.edit');
+
+Route::put('/administrator/teachers/{id}',
+    [AdministratorController::class, 'updateTeacher']
+)->name('administrator.teachers.update');
+
+Route::delete('/administrator/teachers/{id}',
+    [AdministratorController::class, 'destroyTeacher']
+)->name('administrator.teachers.destroy');
+
+/*
+|--------------------------------------------------------------------------
+| MODULE 2 – MANAGE COURSE
+|--------------------------------------------------------------------------
+*/
+
+// Admin
+Route::get('/module2/admin',
+    [ManageCourseController::class, 'indexAdmin']
+)->name('module2.indexAdmin');
+
+Route::put('/module2/{id}/approve',
+    [ManageCourseController::class, 'approve']
+)->name('module2.approve');
+
+Route::put('/module2/{id}/reject',
+    [ManageCourseController::class, 'reject']
+)->name('module2.reject');
+
+// Student
+Route::middleware(['auth'])->group(function () {
+    Route::get('/module2/student',
+        [ManageCourseController::class, 'indexStudent']
+    )->name('module2.indexStudent');
+
+    Route::get('/module2/student/{id}',
+        [ManageCourseController::class, 'showStudent']
+    )->name('module2.showStudent');
+});
+
+Route::resource('module2', ManageCourseController::class);
+
+/*
+|--------------------------------------------------------------------------
+| MODULE 3 – MANAGE CONTENT (TEACHER)
+|--------------------------------------------------------------------------
+*/
+
+// Teacher entry (Form → Course list)
+Route::get('/module3',
+    [ManageContentController::class, 'module3']
+)->name('module3.index');
 
 // Course → Content
 Route::get('/teacher/course/{course}/content',
@@ -66,29 +140,28 @@ Route::delete('/teacher/content/{id}',
     [ManageContentController::class, 'destroy']
 )->name('content.destroy');
 
-// STUDENT VIEW (NO LOGIN YET)
-Route::get('/student/module3', [ManageContentController::class, 'module3'])
-    ->name('student.courses');
-
-Route::get('/student/course/{course}/content',
-    [ManageContentController::class, 'index']
-)->name('student.content.index');
-
-
-Route::get('/dashboard', function () {
-    return redirect()->route('module3.index');  // you can change to module2 or homepage later
-})->name('dashboard');
-
 /*
 |--------------------------------------------------------------------------
-| Your existing auth group (UNCHANGED, keep profile protected)
+| MODULE 3 – CONTENT (STUDENT) ✅ FIXED
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// Student → Course list (Content menu)
+Route::get('/student/module3',
+    [ManageContentController::class, 'studentCourses']
+)->name('student.module3.courses');
 
-require __DIR__.'/auth.php';
+// Student → View contents of a course
+Route::get('/student/course/{course}/content',
+    [ManageContentController::class, 'studentContents']
+)->name('student.module3.contents');
+
+/*
+|--------------------------------------------------------------------------
+| MODULE 4 – ASSESSMENT
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/module4',
+    [ManageAssessmentController::class, 'index']
+)->name('module4.index');

@@ -10,21 +10,19 @@ class ManageCourse extends Model
         'title',
         'description',
         'teacher_id',
-        'difficulty',   
-        'image_url', 
-        'form',   
+        'difficulty',
+        'image_url',
+        'status_course',
+        'coordinator',
     ];
 
-    // optional, relation ke instructor (users table nanti)
     public function teacher()
     {
         return $this->belongsTo(User::class, 'teacher_id');
     }
 
-    // app/Models/Course.php
-public function contents()
-{
-    return $this->hasMany(Content::class);
-}
-
+    public function contents()
+    {
+        return $this->hasMany(Content::class);
+    }
 }
