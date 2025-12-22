@@ -26,6 +26,9 @@
               class="px-6 py-6 space-y-4">
             @csrf
 
+            {{-- IMPORTANT: PASS FORM --}}
+            <input type="hidden" name="form" value="{{ $course->form }}">
+
             {{-- WEEK --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">

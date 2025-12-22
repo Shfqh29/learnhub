@@ -111,43 +111,52 @@ class ManageContentController extends Controller
        STORE CONTENT
     =============================== */
     public function store(Request $request, $course)
-    {
-        $course = $this->getTeacherCourseOrFail($course);
+{
+    // Get allowed course (UNCHANGED)
+    $course = $this->getTeacherCourseOrFail($course);
 
-        $request->validate([
-            'title_id'     => 'required|exists:titles,id',
-            'item_name'    => 'required|string|max:255',
-            'description'  => 'nullable|string',
-            'content_type' => 'required|in:notes,pdf,video,image',
-            'file'         => 'nullable|file|max:20480',
-        ]);
+    // Validation (UNCHANGED)
+    $request->validate([
+        'title_id'     => 'required|exists:titles,id',
+        'item_name'    => 'required|string|max:255',
+        'description'  => 'nullable|string',
+        'content_type' => 'required|in:notes,pdf,video,image',
+        'file'         => 'nullable|file|max:20480',
+    ]);
 
-        $title = Title::where('id', $request->title_id)
-            ->where('course_id', $course->id)
-            ->firstOrFail();
+    // Ensure title belongs to course (UNCHANGED)
+    $title = Title::where('id', $request->title_id)
+        ->where('course_id', $course->id)
+        ->firstOrFail();
 
-        $path = null;
-        $fileType = null;
+    $path = null;
+    $fileType = null;
 
-        if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('contents', 'public');
-            $fileType = $this->detectType($request->file('file'));
-        }
+    // 🔴 ONLY CHANGE IS HERE 🔴
+    if ($request->hasFile('file')) {
+        $path = $request->file('file')
+            ->store('contents/form' . $course->form, 'public');
 
-        Content::create([
-            'course_id'    => $course->id,
-            'title_id'     => $title->id,
-            'item_name'    => $request->item_name,
-            'description'  => $request->description,
-            'content_type' => $request->content_type,
-            'file_path'    => $path,
-            'file_type'    => $fileType,
-        ]);
-
-        return redirect()
-            ->route('content.index', $course->id)
-            ->with('success', 'Content added successfully');
+        $fileType = $this->detectType($request->file('file'));
     }
+
+    // Create content (UNCHANGED)
+    Content::create([
+        'course_id'    => $course->id,
+        'title_id'     => $title->id,
+        'item_name'    => $request->item_name,
+        'description'  => $request->description,
+        'content_type' => $request->content_type,
+        'file_path'    => $path,
+        'file_type'    => $fileType,
+    ]);
+
+    // Redirect (UNCHANGED)
+    return redirect()
+        ->route('content.index', $course->id)
+        ->with('success', 'Content added successfully');
+}
+
 
     /* ===============================
        EDIT CONTENT
@@ -170,38 +179,48 @@ class ManageContentController extends Controller
        UPDATE CONTENT
     =============================== */
     public function update(Request $request, $id)
-    {
-        $content = Content::findOrFail($id);
-        $course  = $this->getTeacherCourseOrFail($content->course_id);
+{
+    // Get content & course (UNCHANGED)
+    $content = Content::findOrFail($id);
+    $course  = $this->getTeacherCourseOrFail($content->course_id);
 
-        $request->validate([
-            'title_id'     => 'required|exists:titles,id',
-            'item_name'    => 'required|string|max:255',
-            'description'  => 'nullable|string',
-            'content_type' => 'required|in:notes,pdf,video,image',
-            'file'         => 'nullable|file|max:20480',
-        ]);
+    // Validation (UNCHANGED)
+    $request->validate([
+        'title_id'     => 'required|exists:titles,id',
+        'item_name'    => 'required|string|max:255',
+        'description'  => 'nullable|string',
+        'content_type' => 'required|in:notes,pdf,video,image',
+        'file'         => 'nullable|file|max:20480',
+    ]);
 
-        if ($request->hasFile('file')) {
-            if ($content->file_path) {
-                Storage::disk('public')->delete($content->file_path);
-            }
+    // 🔴 ONLY CHANGE IS HERE 🔴
+    if ($request->hasFile('file')) {
 
-            $content->file_path = $request->file('file')->store('contents', 'public');
-            $content->file_type = $this->detectType($request->file('file'));
+        // Delete old file (UNCHANGED)
+        if ($content->file_path) {
+            Storage::disk('public')->delete($content->file_path);
         }
 
-        $content->update([
-            'title_id'     => $request->title_id,
-            'item_name'    => $request->item_name,
-            'description'  => $request->description,
-            'content_type' => $request->content_type,
-        ]);
+        $content->file_path = $request->file('file')
+            ->store('contents/form' . $course->form, 'public');
 
-        return redirect()
-            ->route('content.index', $course->id)
-            ->with('success', 'Content updated successfully');
+        $content->file_type = $this->detectType($request->file('file'));
     }
+
+    // Update other fields (UNCHANGED)
+    $content->update([
+        'title_id'     => $request->title_id,
+        'item_name'    => $request->item_name,
+        'description'  => $request->description,
+        'content_type' => $request->content_type,
+    ]);
+
+    // Redirect (UNCHANGED)
+    return redirect()
+        ->route('content.index', $course->id)
+        ->with('success', 'Content updated successfully');
+}
+
 
     /* ===============================
        DELETE CONTENT

@@ -24,6 +24,9 @@
             @csrf
             @method('PUT')
 
+            {{-- IMPORTANT: PASS FORM --}}
+            <input type="hidden" name="form" value="{{ $course->form }}">
+
             {{-- WEEK --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -41,7 +44,7 @@
                 </select>
             </div>
 
-            {{-- NAME --}}
+            {{-- CONTENT NAME --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">
                     Content Name
@@ -53,7 +56,7 @@
                        required>
             </div>
 
-            {{-- TYPE --}}
+            {{-- CONTENT TYPE --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">
                     Content Type
@@ -71,7 +74,7 @@
                 </select>
             </div>
 
-            {{-- DESCRIPTION / LINK --}}
+            {{-- DESCRIPTION --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">
                     Description / Video Link
