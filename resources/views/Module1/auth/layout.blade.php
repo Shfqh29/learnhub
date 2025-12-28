@@ -336,6 +336,6 @@
     <div class="right-side">
         @yield('content')
     </div>
-
+<script src="{{ asset('js/password-validation.js') }}"></script>
 </body>
 </html>

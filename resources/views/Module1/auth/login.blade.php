@@ -35,10 +35,17 @@
                 </span>
             </div>
         </div>
+    @if ($errors->any())
+        <div class="error-message" style="color: red; margin-bottom: 10px;">
+            @foreach ($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
 
         {{-- Links --}}
         <div class="login-links">
-            <a href="#">Forgot Password?</a>
+            <a href="{{ route('password.request') }}">Forgot Password?</a>
             <span> | </span>
             <a href="{{ route('register') }}">Sign Up</a>
         </div>

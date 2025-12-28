@@ -8,6 +8,7 @@ use App\Http\Controllers\Module1\AdministratorController;
 use App\Http\Controllers\ManageCourseController;
 use App\Http\Controllers\ManageContentController;
 use App\Http\Controllers\ManageAssessmentController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,20 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+
+// Forgot password
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
+    ->name('password.request');
+
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])
+    ->name('password.email');
+
+// Reset password
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])
+    ->name('password.update');
 
 // Dashboard
 Route::get('/home', [DashboardController::class, 'index'])->name('home');
@@ -57,9 +72,27 @@ Route::put('/administrator/teachers/{id}',
     [AdministratorController::class, 'updateTeacher']
 )->name('administrator.teachers.update');
 
-Route::delete('/administrator/teachers/{id}',
-    [AdministratorController::class, 'destroyTeacher']
-)->name('administrator.teachers.destroy');
+Route::post('/administrator/teachers/{id}/toggle-status', 
+    [AdministratorController::class, 'toggleStatus']
+)->name('administrator.teachers.toggleStatus');
+
+
+
+// MANAGE STUDENTS (READ)
+Route::get('/administrator/studentslist', [AdministratorController::class, 'showStudentsList'])
+    ->name('administrator.students.index');
+
+// Edit student status
+Route::get('/administrator/students/{id}/edit', [AdministratorController::class, 'editStudent'])
+    ->name('administrator.students.edit');
+
+// Update student status
+Route::put('/administrator/students/{id}', [AdministratorController::class, 'updateStudent'])
+    ->name('administrator.students.update');
+
+// Toggle student status
+Route::post('/administrator/students/{id}/toggle-status', [AdministratorController::class, 'toggleStudentStatus'])
+    ->name('administrator.students.toggleStatus');
 
 /*
 |--------------------------------------------------------------------------

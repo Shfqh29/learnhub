@@ -41,15 +41,15 @@
     {{-- Manage Teachers --}}
     <a href="{{ route('administrator.teacherslist') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->routeIs('administrator.*') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
+        {{ request()->routeIs('administrator.teachers*') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
         <span class="text-lg">👨‍🏫</span>
         <span>Manage Teachers</span>
     </a>
 
     {{-- Manage Students --}}
-    <a href="#"
+    <a href="{{ route('administrator.students.index') }}"
         class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->routeIs('module3.*') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
+        {{ request()->routeIs('administrator.students*') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
         <span class="text-lg">🎓</span>
         <span>Manage Students</span>
     </a>
@@ -60,14 +60,6 @@
         {{ request()->routeIs('module2.indexAdmin') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
         <span class="text-lg">📚</span>
         <span>Manage Courses</span>
-    </a>
-
-    {{-- Settings --}}
-    <a href="{{ url('/settings') }}"
-        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->is('settings') ? 'bg-[#2DD4BF] text-white font-bold' : '' }}">
-        <span class="text-lg">⚙️</span>
-        <span>Settings</span>
     </a>
 
     {{-- Logout --}}

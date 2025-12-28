@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -16,14 +16,27 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        if (auth()->attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->route('home'); // single entry point
+        // Find user by email
+        $user = User::where('email', $request->email)->first();
+
+        // Check if account exists and is deactivated
+        if ($user && $user->status !== 'Active') {
+            return back()->withErrors([
+                'email' => 'Your account has been deactivated. Please contact the administrator.',
+            ]);
         }
 
+        // Attempt login
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate(); // regenerate session
+            return redirect()->route('home'); // successful login
+        }
+
+        // If login fails
         return back()->withErrors([
             'email' => 'Invalid email or password.',
         ]);
+      
     }
 
      public function logout()

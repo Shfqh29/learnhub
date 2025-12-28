@@ -63,14 +63,6 @@
         <span>Assessment</span>
     </a>
 
-    {{-- Settings --}}
-    <a href="{{ url('/settings') }}"
-        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-        {{ request()->is('settings') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-        <span class="text-lg">⚙️</span>
-        <span>Settings</span>
-    </a>
-
     {{-- Logout --}}
     <form action="{{ route('logout') }}" method="POST">
         @csrf
