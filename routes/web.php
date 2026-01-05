@@ -46,6 +46,13 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'
 // Dashboard
 Route::get('/home', [DashboardController::class, 'index'])->name('home');
 
+// Show profile page
+Route::get('/profile', [DashboardController::class, 'editProfile'])->name('profile.edit');
+
+// Update profile
+Route::put('/profile', [DashboardController::class, 'updateProfile'])->name('profile.update');
+
+
 /*
 |--------------------------------------------------------------------------
 | MODULE 1 – ADMIN (Teachers)

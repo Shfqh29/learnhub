@@ -84,16 +84,17 @@
         <span class="text-white font-bold text-lg">Welcome Teacher !</span>
 
     {{-- Profile --}}
-    <div class="flex items-center space-x-3 text-white font-bold">
+    <a href="{{ route('profile.edit') }}" class="flex items-center space-x-3 text-white font-bold">
         <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2"
-             viewBox="0 0 24 24">
+            viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z" />
+                d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z" />
             <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M12 12a4 4 0 100-8 4 4 0 000 8z" />
+                d="M12 12a4 4 0 100-8 4 4 0 000 8z" />
         </svg>
         <span>Profile</span>
-    </div>
+    </a>
+
 </header>
 
         {{-- PAGE CONTENT --}}
