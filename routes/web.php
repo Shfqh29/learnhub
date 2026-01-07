@@ -1,14 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+
 use App\Http\Controllers\Module1\DashboardController;
 use App\Http\Controllers\Module1\AdministratorController;
+
 use App\Http\Controllers\ManageCourseController;
 use App\Http\Controllers\ManageContentController;
-use App\Http\Controllers\ManageAssessmentController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
+
+use App\Http\Controllers\AssessmentController;
+use App\Http\Controllers\StudentAssessmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,16 +51,14 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'
 // Dashboard
 Route::get('/home', [DashboardController::class, 'index'])->name('home');
 
-// Show profile page
+// Profile (Module 1)
 Route::get('/profile', [DashboardController::class, 'editProfile'])->name('profile.edit');
-
-// Update profile
 Route::put('/profile', [DashboardController::class, 'updateProfile'])->name('profile.update');
 
 
 /*
 |--------------------------------------------------------------------------
-| MODULE 1 – ADMIN (Teachers)
+| MODULE 1 – ADMIN (Teachers/Students)
 |--------------------------------------------------------------------------
 */
 
@@ -79,27 +82,23 @@ Route::put('/administrator/teachers/{id}',
     [AdministratorController::class, 'updateTeacher']
 )->name('administrator.teachers.update');
 
-Route::post('/administrator/teachers/{id}/toggle-status', 
+Route::post('/administrator/teachers/{id}/toggle-status',
     [AdministratorController::class, 'toggleStatus']
 )->name('administrator.teachers.toggleStatus');
 
-
-
-// MANAGE STUDENTS (READ)
+// Students (READ)
 Route::get('/administrator/studentslist', [AdministratorController::class, 'showStudentsList'])
     ->name('administrator.students.index');
 
-// Edit student status
 Route::get('/administrator/students/{id}/edit', [AdministratorController::class, 'editStudent'])
     ->name('administrator.students.edit');
 
-// Update student status
 Route::put('/administrator/students/{id}', [AdministratorController::class, 'updateStudent'])
     ->name('administrator.students.update');
 
-// Toggle student status
 Route::post('/administrator/students/{id}/toggle-status', [AdministratorController::class, 'toggleStudentStatus'])
     ->name('administrator.students.toggleStatus');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -131,7 +130,6 @@ Route::middleware(['auth'])->group(function () {
     )->name('module2.showStudent');
 });
 
-Route::resource('module2', ManageCourseController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -188,12 +186,10 @@ Route::delete('/teacher/content/{id}',
 
 Route::middleware(['auth'])->group(function () {
 
-    // Student: list courses by student form
     Route::get('/student/module3',
         [ManageContentController::class, 'studentCourses']
     )->name('student.module3.courses');
 
-    // Student: view contents of selected course
     Route::get('/student/module3/course/{course}',
         [ManageContentController::class, 'studentContents']
     )->name('student.module3.contents');
@@ -201,13 +197,107 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-
 /*
 |--------------------------------------------------------------------------
-| MODULE 4 – ASSESSMENT
+| MODULE 4 – ASSESSMENTS (NEW)
 |--------------------------------------------------------------------------
 */
 
-Route::get('/module4',
-    [ManageAssessmentController::class, 'index']
-)->name('module4.index');
+// optional: bila user pergi /module4 terus bawa ke overview instructor
+Route::get('/module4', function () {
+    return redirect()->route('module4.instructorAssessments.overview');
+})->name('module4.redirect');
+
+
+// INSTRUCTOR ROUTES - Assessment Management
+Route::prefix('module4/instructor')
+    ->name('module4.instructorAssessments.')
+    ->group(function () {
+
+        Route::get('/assessments', [AssessmentController::class, 'overview'])
+            ->name('overview');
+
+        Route::get('/courses/{course}/assessments', [AssessmentController::class, 'index'])
+            ->name('index');
+
+        Route::get('/courses/{course}/assessments/create', [AssessmentController::class, 'create'])
+            ->name('create');
+
+        Route::post('/courses/{course}/assessments', [AssessmentController::class, 'store'])
+            ->name('store');
+
+        Route::get('/courses/{course}/assessments/{assessment}/edit', [AssessmentController::class, 'edit'])
+            ->name('edit');
+
+        Route::put('/courses/{course}/assessments/{assessment}', [AssessmentController::class, 'update'])
+            ->name('update');
+
+        Route::delete('/courses/{course}/assessments/{assessment}', [AssessmentController::class, 'destroy'])
+            ->name('destroy');
+
+        // Question management
+        Route::post('/courses/{course}/assessments/{assessment}/questions',
+            [AssessmentController::class, 'addQuestion']
+        )->name('questions.store');
+
+        Route::delete('/courses/{course}/assessments/{assessment}/questions/{question}',
+            [AssessmentController::class, 'deleteQuestion']
+        )->name('questions.destroy');
+
+        // Results & grading
+        Route::get('/courses/{course}/assessments/{assessment}/results',
+            [AssessmentController::class, 'viewResults']
+        )->name('results');
+
+        Route::put('/courses/{course}/assessments/{assessment}/submissions/{submission}/feedback',
+            [AssessmentController::class, 'updateFeedback']
+        )->name('feedback.update');
+    });
+
+
+// STUDENT ROUTES - Taking Assessments
+Route::prefix('module4/student')
+    ->name('module4.studentAssessments.')
+    ->group(function () {
+
+        Route::get('/assessments', [StudentAssessmentController::class, 'overview'])
+            ->name('overview');
+
+        Route::get('/courses/{course}/assessments', [StudentAssessmentController::class, 'index'])
+            ->name('index');
+
+        Route::get('/courses/{course}/assessments/{assessment}',
+            [StudentAssessmentController::class, 'show']
+        )->name('show');
+
+        // Quiz/exam flow
+        Route::post('/courses/{course}/assessments/{assessment}/start',
+            [StudentAssessmentController::class, 'startAttempt']
+        )->name('start');
+
+        Route::get('/courses/{course}/assessments/{assessment}/attempts/{attempt}',
+            [StudentAssessmentController::class, 'takeQuiz']
+        )->name('take');
+
+        Route::post('/courses/{course}/assessments/{assessment}/attempts/{attempt}/submit',
+            [StudentAssessmentController::class, 'submitQuiz']
+        )->name('submit');
+
+        Route::get('/courses/{course}/assessments/{assessment}/attempts/{attempt}/review',
+            [StudentAssessmentController::class, 'reviewAttempt']
+        )->name('review');
+
+        // Assignment submission
+        Route::post('/courses/{course}/assessments/{assessment}/submit',
+            [StudentAssessmentController::class, 'submitAssignment']
+        )->name('assignment.submit');
+
+        Route::delete('/courses/{course}/assessments/{assessment}/delete',
+            [StudentAssessmentController::class, 'deleteAssignment']
+        )->name('assignment.delete');
+
+        // Autosave (AJAX)
+        Route::post('/courses/{course}/assessments/{assessment}/attempts/{attempt}/autosave',
+            [StudentAssessmentController::class, 'autosave']
+        )->name('autosave');
+    });
