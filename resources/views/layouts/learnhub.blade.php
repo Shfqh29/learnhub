@@ -55,12 +55,12 @@
 </a>
 
 
-       {{-- Assessment --}}
-<a href="{{ route('module4.index') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-   {{ request()->routeIs('module4.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+{{-- Assessments --}}
+<a href="{{ route('module4.studentAssessments.overview') }}"
+   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition
+   {{ request()->routeIs('module4.studentAssessments.*') ? 'bg-[#2563EB] text-white font-bold' : 'text-gray-300 hover:bg-[#334155]' }}">
     <span class="text-lg">📝</span>
-    <span>Assessment</span>
+    <span>Assessments</span>
 </a>
 
 

@@ -82,6 +82,27 @@
                     </div>
                 </div>
 
+
+                {{-- ROLE BASED ASSESSMENT BUTTON --}}
+<div class="mt-4">
+    
+    {{-- FOR INSTRUCTOR --}}
+    @if(auth()->check() && auth()->user()->role === 'instructor')
+        <a href="{{ route('assessments.index', ['course' => $course->id]) }}"
+           class="block w-full bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-3 rounded-lg text-center mt-2">
+            📝 Manage Assessments
+        </a>
+    @endif
+
+    {{-- FOR STUDENT --}}
+    @if(auth()->check() && auth()->user()->role === 'student')
+        <a href="{{ route('student.assessments.index', ['course' => $course->id]) }}"
+           class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-3 rounded-lg text-center mt-2">
+            📝 View Assessments
+        </a>
+    @endif
+</div>
+
                 {{-- BUTTONS --}}
                 <div class="flex justify-between items-center mt-auto pt-6">
                     <a href="{{ route('module2.show', $course->id) }}"
