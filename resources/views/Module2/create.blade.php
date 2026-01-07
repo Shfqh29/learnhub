@@ -1,4 +1,4 @@
-@extends('layouts.learnhub')
+@extends('Module1.teacher.layout')
 
 @section('content')
 
@@ -18,7 +18,7 @@
             </h2>
         </div>
 
-        <form action="{{ route('manage_courses.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('module2.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             {{-- VALIDATION ERRORS --}}
     @if ($errors->any())
@@ -48,6 +48,27 @@
                                  focus:border-blue-500 transition-all shadow-sm hover:shadow-md outline-none"
                           placeholder="Write a description about this course" required></textarea>
             </div>
+
+            {{-- COURSE FORM --}}
+<div class="mb-6">
+    <label class="block text-gray-800 font-semibold mb-2">
+        Student Form
+    </label>
+
+    <select name="form"
+        class="w-full p-3 border border-gray-300 rounded-xl
+               focus:ring-2 focus:ring-blue-500
+               focus:border-blue-500 transition-all
+               shadow-sm hover:shadow-md outline-none"
+        required>
+        <option value="">-- Select Form --</option>
+        <option value="1">Form 1</option>
+        <option value="2">Form 2</option>
+        <option value="3">Form 3</option>
+        <option value="4">Form 4</option>
+        <option value="5">Form 5</option>
+    </select>
+</div>
 
             {{-- COURSE IMAGE --}}
             <div class="mb-6">
@@ -123,7 +144,7 @@
                     Reset
                 </button>
 
-                <a href="{{ route('manage_courses.index') }}"
+                <a href="{{ route('module2.index') }}"
                    class="text-gray-600 hover:text-gray-900 font-medium ml-4">
                     Back
                 </a>
