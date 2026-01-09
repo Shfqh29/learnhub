@@ -120,60 +120,60 @@ class AssessmentController extends Controller
 
     // Add question to quiz/exam
     public function addQuestion(Request $request, $courseId, $assessmentId)
-{
-    $baseRules = [
-        'question_text' => 'required|string',
-        'question_type' => 'required|in:multiple_choice,true_false,short_answer,long_answer',
-        'marks' => 'required|integer|min:1',
-    ];
+    {
+        $baseRules = [
+            'question_text' => 'required|string',
+            'question_type' => 'required|in:multiple_choice,true_false,short_answer,long_answer',
+            'marks' => 'required|integer|min:1',
+        ];
 
-    if (in_array($request->question_type, ['multiple_choice', 'true_false'])) {
-        $baseRules['options'] = 'required|array|min:2';
-        $baseRules['options.*.text'] = 'required|string';
-        $baseRules['correct_answer'] = 'required|integer';
-    }
-
-    $validated = $request->validate($baseRules);
-
-    $question = Question::create([
-        'assessment_id' => $assessmentId,
-        'question_text' => $validated['question_text'],
-        'question_type' => $validated['question_type'],
-        'marks' => $validated['marks'],
-        'order' => Question::where('assessment_id', $assessmentId)->count() + 1,
-    ]);
-
-    if (in_array($validated['question_type'], ['multiple_choice', 'true_false'])) {
-        foreach ($request->options as $index => $option) {
-            QuestionOption::create([
-                'question_id' => $question->id,
-                'option_text' => $option['text'],
-                'is_correct' => $index == $request->correct_answer,
-                'order' => $index + 1,
-            ]);
+        if (in_array($request->question_type, ['multiple_choice', 'true_false'])) {
+            $baseRules['options'] = 'required|array|min:2';
+            $baseRules['options.*.text'] = 'required|string';
+            $baseRules['correct_answer'] = 'required|integer';
         }
+
+        $validated = $request->validate($baseRules);
+
+        $question = Question::create([
+            'assessment_id' => $assessmentId,
+            'question_text' => $validated['question_text'],
+            'question_type' => $validated['question_type'],
+            'marks' => $validated['marks'],
+            'order' => Question::where('assessment_id', $assessmentId)->count() + 1,
+        ]);
+
+        if (in_array($validated['question_type'], ['multiple_choice', 'true_false'])) {
+            foreach ($request->options as $index => $option) {
+                QuestionOption::create([
+                    'question_id' => $question->id,
+                    'option_text' => $option['text'],
+                    'is_correct' => $index == $request->correct_answer,
+                    'order' => $index + 1,
+                ]);
+            }
+        }
+
+        $assessment = Assessment::findOrFail($assessmentId);
+        $assessment->total_marks = $assessment->questions()->sum('marks');
+        $assessment->save();
+
+        return back()->with('success', 'Question added successfully!');
     }
 
-    $assessment = Assessment::findOrFail($assessmentId);
-    $assessment->total_marks = $assessment->questions()->sum('marks');
-    $assessment->save();
+    // Delete question
+    public function deleteQuestion($courseId, $assessmentId, $questionId)
+    {
+        $question = Question::findOrFail($questionId);
+        $question->delete();
 
-    return back()->with('success', 'Question added successfully!');
-}
+        // Recalculate total marks
+        $assessment = Assessment::findOrFail($assessmentId);
+        $assessment->total_marks = $assessment->questions()->sum('marks');
+        $assessment->save();
 
-// Delete question
-public function deleteQuestion($courseId, $assessmentId, $questionId)
-{
-    $question = Question::findOrFail($questionId);
-    $question->delete();
-
-    // Recalculate total marks
-    $assessment = Assessment::findOrFail($assessmentId);
-    $assessment->total_marks = $assessment->questions()->sum('marks');
-    $assessment->save();
-
-    return back()->with('success', 'Question deleted successfully!');
-}
+        return back()->with('success', 'Question deleted successfully!');
+    }
 
 
 
@@ -196,17 +196,16 @@ public function deleteQuestion($courseId, $assessmentId, $questionId)
     }
 
     // View assessment results (Instructor)
-public function viewResults($courseId, $assessmentId)
-{
-    $assessment = Assessment::with([
-        'attempts.user',
-        'submissions.user'
-    ])->findOrFail($assessmentId);
+    public function viewResults($courseId, $assessmentId)
+    {
+        $assessment = Assessment::with([
+            'attempts.user',
+            'submissions.user'
+        ])->findOrFail($assessmentId);
 
-    return view(
-        'module4.instructorAssessments.results',
-        compact('assessment')
-    );
-}
-
+        return view(
+            'module4.instructorAssessments.results',
+            compact('assessment')
+        );
+    }
 }

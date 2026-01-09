@@ -145,6 +145,3 @@
 
 @endsection
 
-    </div>
-
-@endsection

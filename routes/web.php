@@ -27,7 +27,7 @@ Route::get('/', function () {
 });
 
 // Auth
-Route::get('/login', fn () => view('Module1.auth.login'))->name('login');
+Route::get('/login', fn() => view('Module1.auth.login'))->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -62,27 +62,33 @@ Route::put('/profile', [DashboardController::class, 'updateProfile'])->name('pro
 |--------------------------------------------------------------------------
 */
 
-Route::get('/administrator/teacherslist',
+Route::get(
+    '/administrator/teacherslist',
     [AdministratorController::class, 'showTeachersList']
 )->name('administrator.teacherslist');
 
-Route::get('/administrator/addteacher',
+Route::get(
+    '/administrator/addteacher',
     [AdministratorController::class, 'showAddTeacherForm']
 )->name('administrator.addteacher');
 
-Route::post('/administrator/addteacher',
+Route::post(
+    '/administrator/addteacher',
     [AdministratorController::class, 'storeTeacher']
 )->name('administrator.addteacher.post');
 
-Route::get('/administrator/teachers/{id}/edit',
+Route::get(
+    '/administrator/teachers/{id}/edit',
     [AdministratorController::class, 'editTeacher']
 )->name('administrator.teachers.edit');
 
-Route::put('/administrator/teachers/{id}',
+Route::put(
+    '/administrator/teachers/{id}',
     [AdministratorController::class, 'updateTeacher']
 )->name('administrator.teachers.update');
 
-Route::post('/administrator/teachers/{id}/toggle-status',
+Route::post(
+    '/administrator/teachers/{id}/toggle-status',
     [AdministratorController::class, 'toggleStatus']
 )->name('administrator.teachers.toggleStatus');
 
@@ -107,28 +113,60 @@ Route::post('/administrator/students/{id}/toggle-status', [AdministratorControll
 */
 
 // Admin
-Route::get('/module2/admin',
+Route::get(
+    '/module2/admin',
     [ManageCourseController::class, 'indexAdmin']
 )->name('module2.indexAdmin');
 
-Route::put('/module2/{id}/approve',
+Route::put(
+    '/module2/{id}/approve',
     [ManageCourseController::class, 'approve']
 )->name('module2.approve');
 
-Route::put('/module2/{id}/reject',
+Route::put(
+    '/module2/{id}/reject',
     [ManageCourseController::class, 'reject']
 )->name('module2.reject');
 
 // Student
 Route::middleware(['auth'])->group(function () {
-    Route::get('/module2/student',
+    Route::get(
+        '/module2/student',
         [ManageCourseController::class, 'indexStudent']
     )->name('module2.indexStudent');
 
-    Route::get('/module2/student/{id}',
+    Route::get(
+        '/module2/student/{id}',
         [ManageCourseController::class, 'showStudent']
     )->name('module2.showStudent');
 });
+
+// Teacher
+Route::middleware(['auth'])->group(function () {
+
+    // Teacher
+    Route::get('/module2', [ManageCourseController::class, 'index'])
+        ->name('module2.index');
+
+    Route::get('/module2/create', [ManageCourseController::class, 'create'])
+        ->name('module2.create');
+
+    Route::post('/module2', [ManageCourseController::class, 'store'])
+        ->name('module2.store');
+
+    Route::get('/module2/{id}', [ManageCourseController::class, 'show'])
+        ->name('module2.show');
+
+    Route::get('/module2/{id}/edit', [ManageCourseController::class, 'edit'])
+        ->name('module2.edit');
+
+    Route::put('/module2/{id}', [ManageCourseController::class, 'update'])
+        ->name('module2.update');
+
+    Route::delete('/module2/{id}', [ManageCourseController::class, 'destroy'])
+        ->name('module2.destroy');
+});
+
 
 
 /*
@@ -138,43 +176,52 @@ Route::middleware(['auth'])->group(function () {
 */
 
 // Teacher entry (Form → Course list)
-Route::get('/module3',
+Route::get(
+    '/module3',
     [ManageContentController::class, 'module3']
 )->name('module3.index');
 
 // Course → Content
-Route::get('/teacher/course/{course}/content',
+Route::get(
+    '/teacher/course/{course}/content',
     [ManageContentController::class, 'index']
 )->name('content.index');
 
 // Add Week (Title)
-Route::get('/teacher/course/{course}/title/create',
+Route::get(
+    '/teacher/course/{course}/title/create',
     [ManageContentController::class, 'createTitle']
 )->name('title.create');
 
-Route::post('/teacher/course/{course}/title',
+Route::post(
+    '/teacher/course/{course}/title',
     [ManageContentController::class, 'storeTitle']
 )->name('title.store');
 
 // Add Content
-Route::get('/teacher/course/{course}/content/create',
+Route::get(
+    '/teacher/course/{course}/content/create',
     [ManageContentController::class, 'create']
 )->name('content.create');
 
-Route::post('/teacher/course/{course}/content',
+Route::post(
+    '/teacher/course/{course}/content',
     [ManageContentController::class, 'store']
 )->name('content.store');
 
 // Edit / Update / Delete Content
-Route::get('/teacher/content/{id}/edit',
+Route::get(
+    '/teacher/content/{id}/edit',
     [ManageContentController::class, 'edit']
 )->name('content.edit');
 
-Route::put('/teacher/content/{id}',
+Route::put(
+    '/teacher/content/{id}',
     [ManageContentController::class, 'update']
 )->name('content.update');
 
-Route::delete('/teacher/content/{id}',
+Route::delete(
+    '/teacher/content/{id}',
     [ManageContentController::class, 'destroy']
 )->name('content.destroy');
 
@@ -186,14 +233,15 @@ Route::delete('/teacher/content/{id}',
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/student/module3',
+    Route::get(
+        '/student/module3',
         [ManageContentController::class, 'studentCourses']
     )->name('student.module3.courses');
 
-    Route::get('/student/module3/course/{course}',
+    Route::get(
+        '/student/module3/course/{course}',
         [ManageContentController::class, 'studentContents']
     )->name('student.module3.contents');
-
 });
 
 
@@ -236,20 +284,24 @@ Route::prefix('module4/instructor')
             ->name('destroy');
 
         // Question management
-        Route::post('/courses/{course}/assessments/{assessment}/questions',
+        Route::post(
+            '/courses/{course}/assessments/{assessment}/questions',
             [AssessmentController::class, 'addQuestion']
         )->name('questions.store');
 
-        Route::delete('/courses/{course}/assessments/{assessment}/questions/{question}',
+        Route::delete(
+            '/courses/{course}/assessments/{assessment}/questions/{question}',
             [AssessmentController::class, 'deleteQuestion']
         )->name('questions.destroy');
 
         // Results & grading
-        Route::get('/courses/{course}/assessments/{assessment}/results',
+        Route::get(
+            '/courses/{course}/assessments/{assessment}/results',
             [AssessmentController::class, 'viewResults']
         )->name('results');
 
-        Route::put('/courses/{course}/assessments/{assessment}/submissions/{submission}/feedback',
+        Route::put(
+            '/courses/{course}/assessments/{assessment}/submissions/{submission}/feedback',
             [AssessmentController::class, 'updateFeedback']
         )->name('feedback.update');
     });
@@ -266,38 +318,46 @@ Route::prefix('module4/student')
         Route::get('/courses/{course}/assessments', [StudentAssessmentController::class, 'index'])
             ->name('index');
 
-        Route::get('/courses/{course}/assessments/{assessment}',
+        Route::get(
+            '/courses/{course}/assessments/{assessment}',
             [StudentAssessmentController::class, 'show']
         )->name('show');
 
         // Quiz/exam flow
-        Route::post('/courses/{course}/assessments/{assessment}/start',
+        Route::post(
+            '/courses/{course}/assessments/{assessment}/start',
             [StudentAssessmentController::class, 'startAttempt']
         )->name('start');
 
-        Route::get('/courses/{course}/assessments/{assessment}/attempts/{attempt}',
+        Route::get(
+            '/courses/{course}/assessments/{assessment}/attempts/{attempt}',
             [StudentAssessmentController::class, 'takeQuiz']
         )->name('take');
 
-        Route::post('/courses/{course}/assessments/{assessment}/attempts/{attempt}/submit',
+        Route::post(
+            '/courses/{course}/assessments/{assessment}/attempts/{attempt}/submit',
             [StudentAssessmentController::class, 'submitQuiz']
         )->name('submit');
 
-        Route::get('/courses/{course}/assessments/{assessment}/attempts/{attempt}/review',
+        Route::get(
+            '/courses/{course}/assessments/{assessment}/attempts/{attempt}/review',
             [StudentAssessmentController::class, 'reviewAttempt']
         )->name('review');
 
         // Assignment submission
-        Route::post('/courses/{course}/assessments/{assessment}/submit',
+        Route::post(
+            '/courses/{course}/assessments/{assessment}/submit',
             [StudentAssessmentController::class, 'submitAssignment']
         )->name('assignment.submit');
 
-        Route::delete('/courses/{course}/assessments/{assessment}/delete',
+        Route::delete(
+            '/courses/{course}/assessments/{assessment}/delete',
             [StudentAssessmentController::class, 'deleteAssignment']
         )->name('assignment.delete');
 
         // Autosave (AJAX)
-        Route::post('/courses/{course}/assessments/{assessment}/attempts/{attempt}/autosave',
+        Route::post(
+            '/courses/{course}/assessments/{assessment}/attempts/{attempt}/autosave',
             [StudentAssessmentController::class, 'autosave']
         )->name('autosave');
     });

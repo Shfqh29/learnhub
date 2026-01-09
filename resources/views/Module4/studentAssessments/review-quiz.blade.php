@@ -1,4 +1,4 @@
-@extends('layouts.learnhub')
+@extends('Module1.student.layout')
 
 @section('content')
 

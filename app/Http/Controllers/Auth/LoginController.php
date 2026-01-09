@@ -20,7 +20,7 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // Check if account exists and is deactivated
-        if ($user && $user->status !== 'Active') {
+        if ($user && strtolower($user->status) !== 'active') {
             return back()->withErrors([
                 'email' => 'Your account has been deactivated. Please contact the administrator.',
             ]);
@@ -36,10 +36,9 @@ class LoginController extends Controller
         return back()->withErrors([
             'email' => 'Invalid email or password.',
         ]);
-      
     }
 
-     public function logout()
+    public function logout()
     {
         Auth::logout();          // log the user out
         session()->invalidate(); // clear session

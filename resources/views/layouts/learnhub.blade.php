@@ -15,6 +15,10 @@
    {{-- SIDEBAR --}}
 <aside class="w-[250px] min-h-screen bg-[#1E293B] text-gray-300 flex flex-col py-8 px-6">
 
+{{-- DEBUG ROLE (TEMPORARY) --}}
+<p class="text-white text-xs mb-4">
+    ROLE: {{ auth()->user()->role ?? 'none' }}
+</p>
 
   {{-- BRAND --}}
 <div class="mb-16 px-3 flex items-center space-x-2">
@@ -40,14 +44,15 @@
 
 
 
-    {{-- Manage Course --}}
-
-        <a href="{{ route('module2.index') }}"
-           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
-           {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
-            <span class="text-lg">📚</span>
-            <span>Manage Courses</span>
-        </a>
+{{-- Manage Course --}}
+<a href="{{ auth()->check() && auth()->user()->role === 'student' 
+            ? route('module2.indexStudent') 
+            : route('module2.indexAdmin') }}"
+   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-[#334155] transition
+   {{ request()->routeIs('module2.*') ? 'bg-[#2563EB] text-white font-bold' : '' }}">
+    <span class="text-lg">📚</span>
+    <span>Manage Courses</span>
+</a>
 
   {{-- CONTENT (SIDEBAR DROPDOWN) --}}
 <div class="group">
@@ -86,13 +91,28 @@
 </div>
 
 
-{{-- Assessments --}}
-<a href="{{ route('module4.studentAssessments.overview') }}"
-   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition
-   {{ request()->routeIs('module4.studentAssessments.*') ? 'bg-[#2563EB] text-white font-bold' : 'text-gray-300 hover:bg-[#334155]' }}">
-    <span class="text-lg">📝</span>
-    <span>Assessments</span>
-</a>
+{{-- Assessments (role-based) --}}
+@php
+    $role = auth()->user()->role ?? null;  // pastikan column "role" wujud & ada value
+@endphp
+
+@if($role === 'instructor' || $role === 'teacher')
+    <a href="{{ route('module4.instructorAssessments.overview') }}"
+       class="flex items-center space-x-3 px-4 py-3 rounded-lg transition
+       {{ request()->routeIs('module4.instructorAssessments.*') ? 'bg-[#2563EB] text-white font-bold' : 'text-gray-300 hover:bg-[#334155]' }}">
+        <span class="text-lg">📝</span>
+        <span>Assessments</span>
+    </a>
+@else
+    <a href="{{ route('module4.studentAssessments.overview') }}"
+       class="flex items-center space-x-3 px-4 py-3 rounded-lg transition
+       {{ request()->routeIs('module4.studentAssessments.*') ? 'bg-[#2563EB] text-white font-bold' : 'text-gray-300 hover:bg-[#334155]' }}">
+        <span class="text-lg">📝</span>
+        <span>Assessments</span>
+    </a>
+@endif
+
+
 
 
         {{-- Settings --}}
